@@ -16,8 +16,8 @@ case $COMMAND in
         start_pox
         ;;
     restart)
-        start_pox
         stop_pox
+        start_pox
         ;;
     stop)
         stop_pox
