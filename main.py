@@ -138,7 +138,7 @@ class Firewall (EventMixin):
              rule_num += 1
             
     def _handle_ConnectionUp (self, event):
-        acl  = open(fwRulesPath, "rb")
+        acl  = open(fwRules, "rb")
 
         self.connection = event.connection
 
