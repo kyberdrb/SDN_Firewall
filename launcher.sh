@@ -19,9 +19,8 @@ then
 
 elif [ "$1" == "stop" ]
 then
-   echo "INFO: Stopping the controller"
-   sudo kill $(ps aux | grep 'pox.py *' | awk '{print $2}')
-
+    sudo pkill -f pox.py
+    echo "INFO: Controller terminated"
 else
    echo "ERROR: Unknown option"
 fi
