@@ -148,7 +148,7 @@ class Firewall (EventMixin):
 
         self.showFirewallRules()
         log.info("")
-        log.info("Firewall rules pushed on the switch id: %s", dpidToStr(event.dpid))
+        log.info("Firewall rules have been updated for the switch %s", dpidToStr(event.dpid))
 
 def launch ():
     core.registerNew(Firewall)
