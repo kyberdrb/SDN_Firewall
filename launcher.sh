@@ -27,6 +27,7 @@ case $COMMAND in
         stop_pox
         ;;
     *)
+        printf "Unrecognized command\n"
         printf "Usage: %s {start|stop|restart}\n" "$0"
         exit 1
 esac
