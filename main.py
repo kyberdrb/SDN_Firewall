@@ -10,14 +10,6 @@ import csv
 
 log = core.getLogger()
 
-fwPkgPath = os.path.abspath(os.path.dirname(__file__))
-fwRules = "nw_policies.csv"
-fwRules = os.path.join(fwPkgPath, fwRules)
-print fwRules
-#aclSrc = "%s/pox/pox/sdnfirewall/nw_policies.csv" % os.environ[ 'HOME' ]
-#aclSrc = "%s/pox/ext/sdnfirewall/nw_policies.csv" % os.environ[ 'HOME' ]
-
-
 class Firewall (EventMixin):
 
     def __init__ (self):
@@ -138,6 +130,10 @@ class Firewall (EventMixin):
              rule_num += 1
             
     def _handle_ConnectionUp (self, event):
+        fwPkgPath = os.path.abspath(os.path.dirname(__file__))
+        fwRules = "nw_policies.csv"
+        fwRules = os.path.join(fwPkgPath, fwRules)
+        
         acl  = open(fwRules, "rb")
 
         self.connection = event.connection
