@@ -1,7 +1,8 @@
 #!/bin/bash
 
 start_pox () {
-    python /home/mininet/pox/pox.py forwarding.l2_learning  pox.firewall.main &
+    #python /home/mininet/pox/pox.py forwarding.l2_learning  pox.firewall.main &
+    python /home/mininet/pox/pox.py forwarding.l2_learning  pox.sdnfirewall.main &
 }
 
 stop_pox () {
