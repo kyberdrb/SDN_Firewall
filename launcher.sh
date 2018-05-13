@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# zmenit spustanie poxu na "python /home/mininet/pox/pox.py forwarding.l2_learning  pox.firewall.main &"
-
 start_pox () {
-    #./pox.py forwarding.l2_learning pox.firewall.main &
-    python /home/mininet/pox/pox.py log.level --DEBUG forwarding.l3_learning &
+    python /home/mininet/pox/pox.py forwarding.l2_learning  pox.firewall.main &
 }
 
 stop_pox () {
