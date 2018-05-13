@@ -9,7 +9,7 @@ import csv
 
 
 log = core.getLogger()
-aclSrc = "%s/pox/pox/firewall/nw_policies.csv" % os.environ[ 'HOME' ]
+aclSrc = "%s/pox/pox/sdnfirewall/nw_policies.csv" % os.environ[ 'HOME' ]
 
 
 class Firewall (EventMixin):
