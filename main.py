@@ -130,21 +130,21 @@ class Firewall (EventMixin):
              rule_num += 1
             
     def _handle_ConnectionUp (self, event):
-        fwPkgPath = os.path.abspath(os.path.dirname(__file__))
-        fwRules = "fwRules.csv"
-        fwRules = os.path.join(fwPkgPath, fwRules)
-        
         self.connection = event.connection
         log.info("")
         log.info("Connection to the topology created")
 
-        with open(fwRules, "rb") as acl:
-            rulesIterator = csv.reader(acl)
+        fwPkgPath = os.path.abspath(os.path.dirname(__file__))
+        fwRules = "fwRules.csv"
+        fwRules = os.path.join(fwPkgPath, fwRules)
 
-            for rule in rulesIterator:
-                print rule[0]
-                if rule[0] != "id" :
-                    self.addFirewallRule(rule[1], rule[2], rule[3], rule[4], rule[5])
+        with open(fwRules, "rb") as rules:
+            rulesList = csv.reader(rules)
+
+            for rule in rulesList:
+                if rule[0] == "id":
+                    continue
+                self.addFirewallRule(rule[1], rule[2], rule[3], rule[4], rule[5])
 
         self.showFirewallRules()
         log.info("")
