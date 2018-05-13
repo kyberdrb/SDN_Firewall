@@ -16,9 +16,9 @@ case $COMMAND in
         ;;
     stop)
         sudo pkill -f pox.py
-        echo "POX terminated"
+        printf "\nPOX terminated\n\n"
         ;;
     *)
-        echo $"Usage: $0 {start|stop|restart}"
+        printf $"Usage: $0 {start|stop|restart}\n"
         exit 1
 esac
