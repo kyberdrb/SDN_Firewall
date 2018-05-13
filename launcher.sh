@@ -7,15 +7,16 @@
 # prerobit do switch-case
 
 if [ "$1" == "start" ]; then
-   ./pox.py forwarding.l2_learning  pox.firewall.main &
+   #./pox.py forwarding.l2_learning pox.firewall.main &
+   python /home/mininet/pox/pox.py log.level --DEBUG forwarding.l3_learning &
 
 elif [ "$1" == "restart" ]; then
    sudo kill $(ps aux | grep 'pox.py *' | awk '{print $2}')
-   ./pox.py forwarding.l2_learning  pox.firewall.main &
+   ./pox.py forwarding.l2_learning pox.firewall.main &
 
 elif [ "$1" == "stop" ]; then
     sudo pkill -f pox.py
-    
+
 else
     echo "ERROR: Unknown option"
 fi
