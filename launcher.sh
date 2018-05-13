@@ -1,6 +1,8 @@
 #!/bin/bash
 
 start_pox () {
+    # Príkaz `mn -c` slúži na odstránenie dočasných zdrojov z Mininet
+    # prostredia a ukončenie nástroja Mininet
     sudo mn -c
     python $HOME/pox/pox.py forwarding.l2_learning sdnfirewall.main &
 }
