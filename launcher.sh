@@ -6,7 +6,7 @@
 # zmenit spustanie poxu na "python /home/mininet/pox/pox.py forwarding.l2_learning  pox.firewall.main &"
 # prerobit do switch-case
 
-COMMAND = $1
+COMMAND=$1
 
 if [ $COMMAND == "start" ]; then
    #./pox.py forwarding.l2_learning pox.firewall.main &
