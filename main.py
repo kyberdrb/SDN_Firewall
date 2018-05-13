@@ -134,20 +134,21 @@ class Firewall (EventMixin):
         fwRules = "nw_policies.csv"
         fwRules = os.path.join(fwPkgPath, fwRules)
         
-        acl  = open(fwRules, "rb")
+        with open(fwRules, "rb") as acl:
+            rulesIterator = csv.reader(acl)
 
-        self.connection = event.connection
-
-        rulesIterator = csv.reader(acl)
-        for rule in rulesIterator:
-            print rule[0]
-            if rule[0] != "id" :
-                self.addFirewallRule(rule[1], rule[2], rule[3], rule[4], rule[5])
+            for rule in rulesIterator:
+                print rule[0]
+                if rule[0] != "id" :
+                    self.addFirewallRule(rule[1], rule[2], rule[3], rule[4], rule[5])
 
         self.showFirewallRules()
         log.info("")
-        log.info("")
         log.info("Firewall rules pushed on the switch id: %s", dpidToStr(event.dpid))
+        
+        self.connection = event.connection
+        log.info("")
+        log.info("Connection to the topology created")
 
 def launch ():
     core.registerNew(Firewall)
