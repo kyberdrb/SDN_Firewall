@@ -11,9 +11,9 @@ import csv
 log = core.getLogger()
 
 fwPkgPath = os.path.abspath(os.path.dirname(__file__))
-fwRulesPath = "nw_policies.csv"
-fwRulesPath = os.path.join(fwPkgPath, fwPkgPath)
-print fwRulesPath
+fwRules = "nw_policies.csv"
+fwRules = os.path.join(fwPkgPath, fwRules)
+print fwRules
 #aclSrc = "%s/pox/pox/sdnfirewall/nw_policies.csv" % os.environ[ 'HOME' ]
 #aclSrc = "%s/pox/ext/sdnfirewall/nw_policies.csv" % os.environ[ 'HOME' ]
 
