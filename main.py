@@ -132,7 +132,7 @@ class Firewall (EventMixin):
     def _handle_ConnectionUp (self, event):
         self.connection = event.connection
         log.info("")
-        log.info("Connection to the topology created")
+        log.info("Connection to the controller created")
 
         fwPkgPath = os.path.abspath(os.path.dirname(__file__))
         fwRules = "fwRules.csv"

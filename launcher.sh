@@ -1,6 +1,7 @@
 #!/bin/bash
 
 start_pox () {
+    mn -c
     python $HOME/pox/pox.py forwarding.l2_learning sdnfirewall.main &
 }
 
