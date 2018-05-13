@@ -131,7 +131,7 @@ class Firewall (EventMixin):
             
     def _handle_ConnectionUp (self, event):
         fwPkgPath = os.path.abspath(os.path.dirname(__file__))
-        fwRules = "nw_policies.csv"
+        fwRules = "fwRules.csv"
         fwRules = os.path.join(fwPkgPath, fwRules)
         
         self.connection = event.connection
