@@ -6,15 +6,17 @@
 # zmenit spustanie poxu na "python /home/mininet/pox/pox.py forwarding.l2_learning  pox.firewall.main &"
 # prerobit do switch-case
 
-if [ "$1" == "start" ]; then
+COMMAND = $1
+
+if [ $COMMAND == "start" ]; then
    #./pox.py forwarding.l2_learning pox.firewall.main &
    python /home/mininet/pox/pox.py log.level --DEBUG forwarding.l3_learning &
 
-elif [ "$1" == "restart" ]; then
+elif [ $COMMAND == "restart" ]; then
    sudo kill $(ps aux | grep 'pox.py *' | awk '{print $2}')
    ./pox.py forwarding.l2_learning pox.firewall.main &
 
-elif [ "$1" == "stop" ]; then
+elif [ $COMMAND == "stop" ]; then
     sudo pkill -f pox.py
 
 else
