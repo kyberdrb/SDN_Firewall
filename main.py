@@ -43,10 +43,8 @@ class Firewall (EventMixin):
         else:
            action = "add"
 
-        if not isinstance(d, tuple):
-            d = (d,d)
-        msg.idle_timeout = d[0]
-        msg.hard_timeout = d[1]
+        msg.idle_timeout = d
+        msg.hard_timeout = d
 
         # IP protocol match
         if ip_proto == "tcp":
