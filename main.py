@@ -51,7 +51,6 @@ class Firewall (EventMixin):
         else:
             action = "add"
 
-        msg.idle_timeout = d
         msg.hard_timeout = d
 
         # IP protocol match
