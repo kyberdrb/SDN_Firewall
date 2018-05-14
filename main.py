@@ -157,7 +157,8 @@ class Firewall (EventMixin):
         )
 
         # Setting the expiration of the rule
-        msg.hard_timeout = d
+        expiry = int(expiration)
+        msg.hard_timeout = expiry
 
 ###################################################################
 
@@ -190,7 +191,6 @@ class Firewall (EventMixin):
 ###################################################################
 
         # Decide, whether the rule should be kept or removed
-        expiry = int(expiration)
         if expiry == 0:
             action = "del"
         else:
