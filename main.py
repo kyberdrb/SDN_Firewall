@@ -130,12 +130,13 @@ class Firewall (EventMixin):
                 expiration
             )
             message = "Rule added: drop:"
-        message += \
-            " src:" + src + \
-            " dst:" + dst + \
-            " ip_proto:" + ip_proto + \
-            " app_proto:" + app_proto + \
-            " expiration:" + expiration + "s"
+        message += ruleInfo(
+            src, 
+            dst, 
+            ip_proto, 
+            app_proto, 
+            expiration
+        )
         log.info(message)
 
     def delFirewallRule (
@@ -164,32 +165,48 @@ class Firewall (EventMixin):
                     expiration
                 )
                 message = "Rule Deleted: drop:"
-                message += \
-                    " src:" + src + \
-                    " dst:" + dst + \
-                    " ip_proto:" + ip_proto + \
-                    " app_proto:" + app_proto
-                log.info(message)
         else:
             message = "Rule doesn't exist: drop:"
-            message += \
-                    " src:" + src + \
-                    " dst:" + dst + \
-                    " ip_proto:" + ip_proto + \
-                    " app_proto:" + app_proto
-            log.info(message)
+        message += ruleInfo(
+            src, 
+            dst, 
+            ip_proto, 
+            app_proto, 
+            expiration
+        )
+        log.info(message)
+
+    def ruleInfo (
+            self, 
+            src, 
+            dst, 
+            ip_proto, 
+            app_proto, 
+            expiration):
+        return  " src:" + src + \
+                " dst:" + dst + \
+                " ip_proto:" + ip_proto + \
+                " app_proto:" + app_proto + \
+                " expiration:" + expiration + "s" + "\n"
 
     def showFirewallRules (self):
-        message = "*** List Of Firewall Rules ***\n"
+        message = "*** List Of Firewall Rules ***\n\n"
         rule_num = 1
         for item in self.firewall:
             if item[4] != "0":
                 message += \
-                    "Rule " + str(rule_num) + ": " + \
-                    "src:" + item[0] + " " + \
-                    "dst:" + item[1] + " " + \
-                    "ip_proto:" + item[2] + " " + \
-                    "app_proto:" + item[3] + "\n"
+                    "src:" +  + " " + \
+                    "dst:" +  + " " + \
+                    "ip_proto:" +  + " " + \
+                    "app_proto:" +  + " " \
+                    \n"
+                message += ruleInfo(
+                    item[0], 
+                    item[1], 
+                    item[2], 
+                    item[3], 
+                    item[4]
+                )
             rule_num += 1
         log.info(message)
             
@@ -198,7 +215,7 @@ class Firewall (EventMixin):
         log.info("Connection to the controller created")
         self.loadRules()
         self.showFirewallRules()
-        log.info("Firewall rules updated for the switch " + \
+        log.info("Updating rules for the switch " + \
             dpidToStr(event.dpid))
 
     def loadRules (self):
