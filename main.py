@@ -184,8 +184,12 @@ class Firewall (EventMixin):
         rule_num = 1
         for item in self.firewall:
             if item[4] != "0":
-                message += "Rule " + rule_num + ": " + "src:" + item[0] + " " + "dst:" + item[1] + " " + "ip_proto:" + item[2] + "\n"
-                # + " " + "app_proto:" + str(item[3])
+                message += \
+                    "Rule " + str(rule_num) + ": " + \
+                    "src:" + item[0] + " " + \
+                    "dst:" + item[1] + " " + \
+                    "ip_proto:" + item[2] + " " + \
+                    "app_proto:" + item[3] + "\n"
             rule_num += 1
         log.info(message)
             
