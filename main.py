@@ -92,7 +92,14 @@ class Firewall (EventMixin):
         elif action == "add":
             self.connection.send(msg)
 
-    def addFirewallRule (self, src=0, dst=0, ip_proto=0, app_proto=0, expiration = 0, value=True):
+    def addFirewallRule (
+            self, 
+            src=0, 
+            dst=0, 
+            ip_proto=0, 
+            app_proto=0, 
+            expiration = 0, 
+            value=True):
         if (src, dst, ip_proto, app_proto, expiration) in self.firewall:
             log.warning("Rule exists: drop: src:%s dst:%s ip_proto:%s app_proto:%s expiration:%ss", src, dst, ip_proto, app_proto, expiration)
         else:
