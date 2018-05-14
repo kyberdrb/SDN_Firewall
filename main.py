@@ -194,12 +194,6 @@ class Firewall (EventMixin):
         rule_num = 1
         for item in self.firewall:
             if item[4] != "0":
-                message += \
-                    "src:" +  + " " + \
-                    "dst:" +  + " " + \
-                    "ip_proto:" +  + " " + \
-                    "app_proto:" +  + " " \
-                    \n"
                 message += ruleInfo(
                     item[0], 
                     item[1], 
