@@ -189,7 +189,7 @@ class Firewall (EventMixin):
                     "src:" + item[0] + " " + \
                     "dst:" + item[1] + " " + \
                     "ip_proto:" + item[2] + " " + \
-                    "app_proto:" + item[3]
+                    "app_proto:" + str(item[3])
                 log.info(message)
             rule_num += 1
             
