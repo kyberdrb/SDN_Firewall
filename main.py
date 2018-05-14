@@ -109,15 +109,15 @@ class Firewall (EventMixin):
             app_proto=0, 
             expiration = 0, 
             value=True):
-        if (src, 
+        if  (src, 
             dst, 
             ip_proto, 
             app_proto, 
             expiration) in self.firewall:
-            message = "Rule exists: drop:"
+                message = "Rule exists: drop:"
         else:
-            self.firewall[
-                (src, 
+            self.firewall[(
+                src, 
                 dst, 
                 ip_proto, 
                 app_proto, 
@@ -130,13 +130,13 @@ class Firewall (EventMixin):
                 expiration
             )
             message = "Rule added: drop:"
-            message += \
-                " src:" + src + \
-                " dst:" + dst + \
-                " ip_proto:" + ip_proto + \
-                " app_proto:" + app_proto + \
-                " expiration:" + expiration + "s"
-            log.info(message)
+        message += \
+            " src:" + src + \
+            " dst:" + dst + \
+            " ip_proto:" + ip_proto + \
+            " app_proto:" + app_proto + \
+            " expiration:" + expiration + "s"
+        log.info(message)
 
     def delFirewallRule (
             self, 
@@ -146,29 +146,60 @@ class Firewall (EventMixin):
             app_proto=0, 
             expiration = 0, 
             value=True):
-        if (src, dst, ip_proto, app_proto) in self.firewall:
-            del self.firewall[(src, dst, ip_proto, app_proto)]
-            self.pushRuleToSwitch(src, dst, ip_proto, app_proto, expiration)
-            log.info("Rule Deleted: drop: src:%s dst:%s ip_proto:%s app_proto:%s", src, dst, ip_proto, app_proto)
+        if  (src,
+            dst, 
+            ip_proto, 
+            app_proto) in self.firewall:
+                del self.firewall[(
+                    src, 
+                    dst, 
+                    ip_proto, 
+                    app_proto
+                )]
+                self.pushRuleToSwitch(
+                    src, 
+                    dst, 
+                    ip_proto, 
+                    app_proto, 
+                    expiration
+                )
+                message = "Rule Deleted: drop:"
+                message += \
+                    " src:" + src + \
+                    " dst:" + dst + \
+                    " ip_proto:" + ip_proto + \
+                    " app_proto:" + app_proto
+                log.info(message)
         else:
-            log.error("Rule doesn't exist: drop: src:%s dst:%s ip_proto:%s app_proto:%s", src, dst, ip_proto, app_proto)
+            message = "Rule doesn't exist: drop:"
+            message += \
+                    " src:" + src + \
+                    " dst:" + dst + \
+                    " ip_proto:" + ip_proto + \
+                    " app_proto:" + app_proto
+            log.info(message)
 
     def showFirewallRules (self):
-        log.info("")
-        log.info("")
         log.info("*** List Of Firewall Rules ***")
         rule_num = 1
         for item in self.firewall:
-             if item[4] != "0":
-                log.info("Rule %s: src:%s dst:%s ip_proto:%s app_proto:%s", rule_num, item[0], item[1], item[2], item[3])
-             rule_num += 1
+            if item[4] != "0":
+                message = \
+                    "Rule " + rule_num + ": " + \
+                    "src:" + item[0] + " " + \
+                    "dst:" + item[1] + " " + \
+                    "ip_proto:" + item[2] + " " + \
+                    "app_proto:" + item[3]
+                log.info(message)
+            rule_num += 1
             
     def _handle_ConnectionUp (self, event):
         self.connection = event.connection
-        log.info("")
         log.info("Connection to the controller created")
 
-        fwPkgPath = os.path.abspath(os.path.dirname(__file__))
+        fwPkgPath = os.path.abspath(
+            os.path.dirname(__file__)
+        )
         fwRules = "fwRules.csv"
         fwRules = os.path.join(fwPkgPath, fwRules)
 
@@ -178,11 +209,17 @@ class Firewall (EventMixin):
             for rule in rulesList:
                 if rule[0] == "id":
                     continue
-                self.addFirewallRule(rule[1], rule[2], rule[3], rule[4], rule[5])
+                self.addFirewallRule(
+                    rule[1], 
+                    rule[2], 
+                    rule[3], 
+                    rule[4], 
+                    rule[5])
 
         self.showFirewallRules()
-        log.info("")
-        log.info("Firewall rules have been updated for the switch %s", dpidToStr(event.dpid))
+        message = "Firewall rules updated for the switch "
+        message += dpidToStr(event.dpid)
+        log.info(message)
 
 def launch ():
     core.registerNew(Firewall)
