@@ -61,7 +61,8 @@ class Firewall (EventMixin):
                     item[1], 
                     item[2], 
                     item[3], 
-                    item[4]
+                    item[4],
+                    item[5]
                 )
             rule_num += 1
         log.info(message)
