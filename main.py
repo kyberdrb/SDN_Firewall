@@ -180,18 +180,14 @@ class Firewall (EventMixin):
             log.info(message)
 
     def showFirewallRules (self):
-        log.info("*** List Of Firewall Rules ***")
+        message = "*** List Of Firewall Rules ***\n"
         rule_num = 1
         for item in self.firewall:
             if item[4] != "0":
-                message = \
-                    "Rule " + rule_num + ": " + \
-                    "src:" + item[0] + " " + \
-                    "dst:" + item[1] + " " + \
-                    "ip_proto:" + item[2] + " " + \
-                    "app_proto:" + str(item[3])
-                log.info(message)
+                message += "Rule " + rule_num + ": " + "src:" + item[0] + " " + "dst:" + item[1] + " " + "ip_proto:" + item[2] + "\n"
+                # + " " + "app_proto:" + str(item[3])
             rule_num += 1
+        log.info(message)
             
     def _handle_ConnectionUp (self, event):
         self.connection = event.connection
