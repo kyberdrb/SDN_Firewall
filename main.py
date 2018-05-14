@@ -247,7 +247,7 @@ class Firewall (EventMixin):
                 " ip_proto:" + ip_proto + \
                 " app_proto:" + app_proto + \
                 " expiration:" + expiration + "s" + \
-                " delay" + delay + "\n"
+                " delay:" + delay + "\n"
 
 def launch ():
     core.registerNew(Firewall)
