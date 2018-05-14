@@ -15,18 +15,28 @@ class Firewall (EventMixin):
     def __init__ (self):
         self.listenTo(core.openflow)
         self.firewall = {}
-        log.info("Starting SDN Firewall")
+        log.info("*** Starting SDN Firewall ***")
 
         self.FTP_PORT      = 21
         self.HTTP_PORT     = 80
         self.TELNET_PORT   = 23
         self.SMTP_PORT     = 25
 
-    def pushRuleToSwitch (self, src, dst, ip_proto, app_proto, expiration):
+    def pushRuleToSwitch (
+            self, 
+            src, 
+            dst, 
+            ip_proto, 
+            app_proto, 
+            expiration):
         # creating a switch flow table entry
         msg = of.ofp_flow_mod()
         msg.priority = 20
-        msg.actions.append(of.ofp_action_output(port=of.OFPP_NONE))
+        msg.actions.append(
+            of.ofp_action_output(
+                port=of.OFPP_NONE
+            )
+        )
 
         # creating a match structure
         match = of.ofp_match()
@@ -107,7 +117,14 @@ class Firewall (EventMixin):
             self.pushRuleToSwitch(src, dst, ip_proto, app_proto, expiration)
             log.info("Rule added: drop: src:%s dst:%s ip_proto:%s app_proto:%s expiration:%ss", src, dst, ip_proto, app_proto, expiration)
 
-    def delFirewallRule (self, src=0, dst=0, ip_proto=0, app_proto=0, expiration = 0, value=True):
+    def delFirewallRule (
+            self, 
+            src=0, 
+            dst=0, 
+            ip_proto=0, 
+            app_proto=0, 
+            expiration = 0, 
+            value=True):
         if (src, dst, ip_proto, app_proto) in self.firewall:
             del self.firewall[(src, dst, ip_proto, app_proto)]
             self.pushRuleToSwitch(src, dst, ip_proto, app_proto, expiration)
@@ -118,7 +135,7 @@ class Firewall (EventMixin):
     def showFirewallRules (self):
         log.info("")
         log.info("")
-        log.info("!!! Displaying Firewall Rules !!!")
+        log.info("*** List Of Firewall Rules ***")
         rule_num = 1
         for item in self.firewall:
              if item[4] != "0":
