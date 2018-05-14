@@ -24,7 +24,7 @@ class Firewall (EventMixin):
         self.SMTP_PORT     = 25
 
 
-    def pushRuleToSwitch (self, src, dst, ip_proto, app_proto, duration):
+    def pushRuleToSwitch (self, src, dst, ip_proto, app_proto, expiration):
         # creating a switch flow table entry
         msg = of.ofp_flow_mod()
         msg.priority = 20
@@ -36,8 +36,8 @@ class Firewall (EventMixin):
         # set packet ethernet type as IP
         match.dl_type = 0x800;
 
-        # Setting the duration of the rule
-        d = int(duration)
+        # Setting the expiration of the rule
+        d = int(expiration)
         if d == 0:
            action = "del"
         else:
@@ -101,19 +101,19 @@ class Firewall (EventMixin):
                 self.connection.send(msg)
 
 
-    def addFirewallRule (self, src=0, dst=0, ip_proto=0, app_proto=0, duration = 0, value=True):
-        if (src, dst, ip_proto, app_proto, duration) in self.firewall:
-            log.warning("Rule exists: drop: src:%s dst:%s ip_proto:%s app_proto:%s duration:%s", src, dst, ip_proto, app_proto, duration)
+    def addFirewallRule (self, src=0, dst=0, ip_proto=0, app_proto=0, expiration = 0, value=True):
+        if (src, dst, ip_proto, app_proto, expiration) in self.firewall:
+            log.warning("Rule exists: drop: src:%s dst:%s ip_proto:%s app_proto:%s expiration:%s", src, dst, ip_proto, app_proto, expiration)
         else:
-            self.firewall[(src, dst, ip_proto, app_proto, duration)]=value
-            self.pushRuleToSwitch(src, dst, ip_proto, app_proto, duration)
-            log.info("Rule added: drop: src:%s dst:%s ip_proto:%s app_proto:%s duration:%s", src, dst, ip_proto, app_proto, duration)
+            self.firewall[(src, dst, ip_proto, app_proto, expiration)]=value
+            self.pushRuleToSwitch(src, dst, ip_proto, app_proto, expiration)
+            log.info("Rule added: drop: src:%s dst:%s ip_proto:%s app_proto:%s expiration:%s", src, dst, ip_proto, app_proto, expiration)
 
 
-    def delFirewallRule (self, src=0, dst=0, ip_proto=0, app_proto=0, duration = 0, value=True):
+    def delFirewallRule (self, src=0, dst=0, ip_proto=0, app_proto=0, expiration = 0, value=True):
         if (src, dst, ip_proto, app_proto) in self.firewall:
             del self.firewall[(src, dst, ip_proto, app_proto)]
-            self.pushRuleToSwitch(src, dst, ip_proto, app_proto, duration)
+            self.pushRuleToSwitch(src, dst, ip_proto, app_proto, expiration)
             log.info("Rule Deleted: drop: src:%s dst:%s ip_proto:%s app_proto:%s", src, dst, ip_proto, app_proto)
         else:
             log.error("Rule doesn't exist: drop: src:%s dst:%s ip_proto:%s app_proto:%s", src, dst, ip_proto, app_proto)
