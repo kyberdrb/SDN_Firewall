@@ -48,7 +48,8 @@ class Firewall (EventMixin):
                     rule[2], 
                     rule[3], 
                     rule[4], 
-                    rule[5])
+                    rule[5],
+                    rule[6])
 
     def showFirewallRules (self):
         message = "*** List Of Firewall Rules ***\n\n"
@@ -72,6 +73,7 @@ class Firewall (EventMixin):
             ip_proto=0, 
             app_proto=0, 
             expiration = 0, 
+            delay = 0,
             value=True):
         if  (src, 
             dst, 
@@ -85,7 +87,8 @@ class Firewall (EventMixin):
                 dst, 
                 ip_proto, 
                 app_proto, 
-                expiration)] = value
+                expiration,
+                delay)] = value
             self.pushRuleToSwitch(
                 src, 
                 dst, 
@@ -99,7 +102,8 @@ class Firewall (EventMixin):
             dst, 
             ip_proto, 
             app_proto, 
-            expiration
+            expiration,
+            delay
         )
         log.info(message)
 
@@ -109,7 +113,8 @@ class Firewall (EventMixin):
             dst=0, 
             ip_proto=0, 
             app_proto=0, 
-            expiration = 0, 
+            expiration = 0,
+            delay = 0, 
             value=True):
         if  (src,
             dst, 
@@ -136,7 +141,8 @@ class Firewall (EventMixin):
             dst, 
             ip_proto, 
             app_proto, 
-            expiration
+            expiration,
+            delay
         )
         log.info(message)
 
@@ -234,12 +240,14 @@ class Firewall (EventMixin):
             dst, 
             ip_proto, 
             app_proto, 
-            expiration):
+            expiration,
+            delay):
         return  " src:" + src + \
                 " dst:" + dst + \
                 " ip_proto:" + ip_proto + \
                 " app_proto:" + app_proto + \
-                " expiration:" + expiration + "s" + "\n"
+                " expiration:" + expiration + "s" + \
+                " delay" + delay + "\n"
 
 def launch ():
     core.registerNew(Firewall)
