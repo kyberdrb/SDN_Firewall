@@ -17,11 +17,6 @@ class Firewall (EventMixin):
         self.firewall = {}
         log.info("*** Starting SDN Firewall ***")
 
-        self.FTP_PORT      = 21
-        self.HTTP_PORT     = 80
-        self.TELNET_PORT   = 23
-        self.SMTP_PORT     = 25
-
     def _handle_ConnectionUp (self, event):
         self.connection = event.connection
         log.info("Connection to the controller created")
@@ -175,6 +170,8 @@ class Firewall (EventMixin):
         # set packet ethernet type as IP
         match.dl_type = 0x800;
 
+###################################################################
+
         # IP protocol match
         if ip_proto == "tcp":
             match.nw_proto = pkt.ipv4.TCP_PROTOCOL
@@ -185,15 +182,17 @@ class Firewall (EventMixin):
         elif ip_proto == "igmp":
             match.nw_proto = pkt.ipv4.IGMP_PROTOCOL
 
+###################################################################
+
         #Application protocol match
         if app_proto == "ftp":
-            match.tp_dst = self.FTP_PORT
+            match.tp_dst = 21
         elif app_proto == "http":
-            match.tp_dst = self.HTTP_PORT
+            match.tp_dst = 80
         elif app_proto == "telnet":
-            match.tp_dst = self.TELNET_PORT
+            match.tp_dst = 23
         elif app_proto == "smtp":
-            match.tp_dst = self.SMTP_PORT
+            match.tp_dst = 25
 
 ###################################################################
 

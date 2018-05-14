@@ -5,12 +5,12 @@ cleanupMininetEnv () {
 }
 
 start_pox () {
-    cleanupMininetEnv
     python $HOME/pox/pox.py forwarding.l2_learning sdnfirewall.main &
 }
 
 stop_pox () {
     sudo pkill -f pox.py
+    cleanupMininetEnv
     printf "\nPOX terminated with the exit code %s\n\n" "$?"
 }
 
