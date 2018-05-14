@@ -7,15 +7,12 @@ from pox.lib.addresses import EthAddr, IPAddr
 import os
 import csv
 
-
-log = core.getLogger()
-
 class Firewall (EventMixin):
 
     def __init__ (self):
         self.listenTo(core.openflow)
         self.firewall = {}
-        log.info("*** Starting SDN Firewall ***")
+        log("*** Starting SDN Firewall ***")
 
         self.FTP_PORT      = 21
         self.HTTP_PORT     = 80
@@ -136,7 +133,7 @@ class Firewall (EventMixin):
             " ip_proto:" + ip_proto + \
             " app_proto:" + app_proto + \
             " expiration:" + expiration + "s"
-        log.info(message)
+        log(message)
 
     def delFirewallRule (
             self, 
@@ -169,7 +166,7 @@ class Firewall (EventMixin):
                     " dst:" + dst + \
                     " ip_proto:" + ip_proto + \
                     " app_proto:" + app_proto
-                log.info(message)
+                log(message)
         else:
             message = "Rule doesn't exist: drop:"
             message += \
@@ -177,7 +174,7 @@ class Firewall (EventMixin):
                     " dst:" + dst + \
                     " ip_proto:" + ip_proto + \
                     " app_proto:" + app_proto
-            log.info(message)
+            log(message)
 
     def showFirewallRules (self):
         message = "*** List Of Firewall Rules ***\n"
@@ -191,11 +188,11 @@ class Firewall (EventMixin):
                     "ip_proto:" + item[2] + " " + \
                     "app_proto:" + item[3] + "\n"
             rule_num += 1
-        log.info(message)
+        log(message)
             
     def _handle_ConnectionUp (self, event):
         self.connection = event.connection
-        log.info("Connection to the controller created")
+        log("Connection to the controller created")
 
         fwPkgPath = os.path.abspath(
             os.path.dirname(__file__)
@@ -219,6 +216,10 @@ class Firewall (EventMixin):
         self.showFirewallRules()
         message = "Firewall rules updated for the switch "
         message += dpidToStr(event.dpid)
+        log(message)
+
+    def log (message):
+        log = core.getLogger()
         log.info(message)
 
 def launch ():
