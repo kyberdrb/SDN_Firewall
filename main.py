@@ -198,9 +198,8 @@ class Firewall (EventMixin):
         log.info("Connection to the controller created")
         self.loadRules()
         self.showFirewallRules()
-        message = "Firewall rules updated for the switch "
-        message += dpidToStr(event.dpid)
-        log.info(message)
+        log.info("Firewall rules updated for the switch " + \
+            dpidToStr(event.dpid))
 
     def loadRules (self):
         fwPkgPath = os.path.abspath(
