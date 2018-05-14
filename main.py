@@ -156,20 +156,16 @@ class Firewall (EventMixin):
             )
         )
 
+        # Setting the expiration of the rule
+        msg.hard_timeout = d
+
+###################################################################
+
         # creating a match structure
         match = of.ofp_match()
 
         # set packet ethernet type as IP
         match.dl_type = 0x800;
-
-        # Setting the expiration of the rule
-        d = int(expiration)
-        if d == 0:
-            action = "del"
-        else:
-            action = "add"
-
-        msg.hard_timeout = d
 
         # IP protocol match
         if ip_proto == "tcp":
@@ -191,6 +187,17 @@ class Firewall (EventMixin):
         elif app_proto == "smtp":
             match.tp_dst = self.SMTP_PORT
 
+###################################################################
+
+        # Decide, whether the rule should be kept or removed
+        expiry = int(expiration)
+        if expiry == 0:
+            action = "del"
+        else:
+            action = "add"
+
+###################################################################
+
         # flow rule for src:host1 dst:host2
         if src != "any":
             match.nw_src = IPAddr(src)
@@ -204,6 +211,8 @@ class Firewall (EventMixin):
             self.connection.send(msg)
         elif action == "add":
             self.connection.send(msg)
+
+###################
 
         # flow rule for src:host2 dst:host1
         if dst != "any":
