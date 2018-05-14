@@ -109,12 +109,34 @@ class Firewall (EventMixin):
             app_proto=0, 
             expiration = 0, 
             value=True):
-        if (src, dst, ip_proto, app_proto, expiration) in self.firewall:
-            log.warning("Rule exists: drop: src:%s dst:%s ip_proto:%s app_proto:%s expiration:%ss", src, dst, ip_proto, app_proto, expiration)
+        if (src, 
+            dst, 
+            ip_proto, 
+            app_proto, 
+            expiration) in self.firewall:
+            message = "Rule exists: drop:"
         else:
-            self.firewall[(src, dst, ip_proto, app_proto, expiration)]=value
-            self.pushRuleToSwitch(src, dst, ip_proto, app_proto, expiration)
-            log.info("Rule added: drop: src:%s dst:%s ip_proto:%s app_proto:%s expiration:%ss", src, dst, ip_proto, app_proto, expiration)
+            self.firewall[
+                (src, 
+                dst, 
+                ip_proto, 
+                app_proto, 
+                expiration)] = value
+            self.pushRuleToSwitch(
+                src, 
+                dst, 
+                ip_proto, 
+                app_proto, 
+                expiration
+            )
+            message = "Rule added: drop:"
+            message += \
+                " src:" + src + \
+                " dst:" + dst + \
+                " ip_proto:" + ip_proto + \
+                " app_proto:" + app_proto + \
+                " expiration:" + expiration + "s"
+            log.info(message)
 
     def delFirewallRule (
             self, 
