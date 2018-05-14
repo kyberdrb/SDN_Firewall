@@ -10,7 +10,6 @@ start_pox () {
 
 stop_pox () {
     sudo pkill -f pox.py
-    cleanupMininetEnv
     printf "\nPOX terminated with the exit code %s\n\n" "$?"
 }
 
@@ -26,6 +25,9 @@ case $COMMAND in
         ;;
     stop)
         stop_pox
+        ;;
+    clean)
+        cleanupMininetEnv
         ;;
     *)
         printf "Unrecognized command\n"
