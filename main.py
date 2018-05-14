@@ -196,7 +196,13 @@ class Firewall (EventMixin):
     def _handle_ConnectionUp (self, event):
         self.connection = event.connection
         log.info("Connection to the controller created")
+        self.loadRules()
+        self.showFirewallRules()
+        message = "Firewall rules updated for the switch "
+        message += dpidToStr(event.dpid)
+        log.info(message)
 
+    def loadRules (self):
         fwPkgPath = os.path.abspath(
             os.path.dirname(__file__)
         )
@@ -215,11 +221,6 @@ class Firewall (EventMixin):
                     rule[3], 
                     rule[4], 
                     rule[5])
-
-        self.showFirewallRules()
-        message = "Firewall rules updated for the switch "
-        message += dpidToStr(event.dpid)
-        log.info(message)
 
 def launch ():
     core.registerNew(Firewall)
