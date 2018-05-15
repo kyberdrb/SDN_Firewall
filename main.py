@@ -25,7 +25,7 @@ class Firewall (EventMixin):
         log.info("Rules for the switch " + \
             dpidToStr(event.dpid) + \
             " have been successfuly updated")
-        self.showFirewallRules()
+        #self.showFirewallRules()
 
     def loadRules (self):
         fwPkgPath = os.path.abspath(
