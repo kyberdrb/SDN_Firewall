@@ -47,12 +47,12 @@ class Firewall (EventMixin):
                     continue
 
                 newRule = fwrule.Rule(
-                    rule[1], 
-                    rule[2], 
-                    rule[3], 
-                    rule[4], 
-                    rule[5], 
-                    rule[6]
+                    src=rule[1], 
+                    dst=rule[2], 
+                    ip_proto=rule[3], 
+                    app_proto=rule[4], 
+                    expiration=rule[5], 
+                    delay=rule[6]
                 )
 
                 log.info(newRule.ruleInfo() + "\n")
