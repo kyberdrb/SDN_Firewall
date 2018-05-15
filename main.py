@@ -47,8 +47,8 @@ class Firewall (EventMixin):
                 
                 if delay > 0:
                     self.ruleDelays[rule_id] = \
-                        "Create a 'Timer' instance with delay " + \
-                            delay + "s!"
+                        "Create a Timer instance with delay " + \
+                        delay + "s!"
                 rule_id += 1
 
                 self.addFirewallRule(
