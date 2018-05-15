@@ -8,7 +8,6 @@ import os
 import csv
 from threading import Timer
 
-
 log = core.getLogger()
 
 class Firewall (EventMixin):
@@ -26,6 +25,10 @@ class Firewall (EventMixin):
             dpidToStr(event.dpid) + \
             " have been successfuly updated")
 
+    def loadRules (self):
+        fwRules = self.openRulesFile("fwRules.csv")
+        self.addRules(fwRules)
+
     def openRulesFile(self, filename):
         fwPkgPath = os.path.abspath(
             os.path.dirname(__file__)
@@ -34,9 +37,7 @@ class Firewall (EventMixin):
         fwRules = os.path.join(fwPkgPath, fwRules)
         return fwRules
 
-    def loadRules (self):
-        fwRules = self.openRulesFile("fwRules.csv")
-
+    def addRules(self):
         with open(fwRules, "rb") as rules:
             rulesList = csv.reader(rules)
 
@@ -70,24 +71,6 @@ class Firewall (EventMixin):
                         delayedRule[5], 
                         str(newDelay)]
                     ).start()
-
-    def showFirewallRules (self):
-        message = "*** List Of Firewall Rules ***\n\n"
-        for item in self.firewall:
-            if item[4] != "0":
-                message += self.ruleInfo(
-                    item[0], 
-                    item[1], 
-                    item[2], 
-                    item[3], 
-                    item[4],
-                    item[5]
-                )
-        log.info(message)
-
-        # Zaujimave, 'firewall' je Dictionary
-        # struktura s KOMPOZITNYM klucom
-        #print(self.firewall)
 
     def addFirewallRule (
             self, 
