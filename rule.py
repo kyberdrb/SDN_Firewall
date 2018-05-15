@@ -23,12 +23,12 @@ class Rule:
             app_proto, 
             expiration,
             delay):
-        return  " src:" + src + \
-                " dst:" + dst + \
-                " ip_proto:" + ip_proto + \
-                " app_proto:" + app_proto + \
-                " expiration:" + expiration + "s" + \
-                " delay:" + delay + "s"
+        return  " src:" + self.src + \
+                " dst:" + self.dst + \
+                " ip_proto:" + self.ip_proto + \
+                " app_proto:" + self.app_proto + \
+                " expiration:" + self.expiration + "s" + \
+                " delay:" + self.delay + "s"
 
     def helloWorld(self):
         print "Hello World!"

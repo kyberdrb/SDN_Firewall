@@ -7,7 +7,7 @@ from pox.lib.addresses import EthAddr, IPAddr
 import os
 import csv
 from threading import Timer
-import rule
+import rule as fwrule
 
 log = core.getLogger()
 
@@ -45,6 +45,19 @@ class Firewall (EventMixin):
             for rule in rulesList:
                 if rule[0] == "id":
                     continue
+
+                newRule = fwrule(
+                    rule[1], 
+                    rule[2], 
+                    rule[3], 
+                    rule[4], 
+                    rule[5], 
+                    rule[6]
+                )
+
+                newRule.helloWorld()
+                
+                log.info("AWESOME" + newRule.ruleInfo() + "\n")
 
                 delay = int(rule[6])
                 if delay <= 0:
