@@ -65,7 +65,7 @@ class Firewall (EventMixin):
                         [newRule]
                     ).start()
                 else:
-                    if value > 65535:
+                    if newRule.delay > 65535:
                         newRule.delay = 65535
                     else:
                         newRule.delay = 0
