@@ -43,14 +43,19 @@ class Firewall (EventMixin):
                 if rule[0] == "id":
                     continue
 
-                delay = rule[6]
+                delay = int(rule[6])
                 if delay < 0:
                     delay = 0
-                
-                if delay > 0:
+                    self.ruleDelays[rule_id] = \
+                        "Delay adjusted from " rule[6] " to " + str(delay) + "s"
+                elif delay > 0:
                     self.ruleDelays[rule_id] = \
                         "Create a Timer instance with delay " + \
-                        delay + "s!"
+                        str(delay) + "s!"
+                else:
+                    self.ruleDelays[rule_id] = \
+                        "No delay for the rule " + str(delay) + "s"
+
                 rule_id += 1
 
                 self.addFirewallRule(
