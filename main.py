@@ -59,6 +59,9 @@ class Firewall (EventMixin):
 
                 rule_id += 1
 
+                t = Timer(10, self.hello)
+                t.start()
+
                 self.addFirewallRule(
                     rule[1], 
                     rule[2], 
@@ -67,6 +70,9 @@ class Firewall (EventMixin):
                     rule[5],
                     str(delay)
                 )
+
+    def hello(self):
+        print "another rule added after delay"
 
     def showFirewallRules (self):
         message = "*** List Of Firewall Rules ***\n\n"
@@ -273,12 +279,7 @@ class Firewall (EventMixin):
                 " expiration:" + expiration + "s" + \
                 " delay:" + delay + "\n"
 
-    def hello():
-        print "another rule added after delay"
-
 def launch ():
-    t = Timer(10, hello)
-    t.start()
     core.registerNew(Firewall)
 
 
