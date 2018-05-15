@@ -242,7 +242,7 @@ class Firewall (EventMixin):
             log.info("Rule have been removed from the switch - forward: H1 -> H2")
         elif action == "add":
             self.connection.send(msg)
-            log.info("Rule have been added to the switch - forward: H1 -> H2"")
+            log.info("Rule have been added to the switch - forward: H1 -> H2")
 
 ###################
 
