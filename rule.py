@@ -19,7 +19,7 @@ class Rule:
         self.app_proto = app_proto
         self.expiration = expiration
         self.delay = delay
-        self._id = generateID(
+        self._id = self.generateID(
             self.src,
             self.dst,
             self.ip_proto,
