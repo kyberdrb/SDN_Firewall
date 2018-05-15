@@ -45,35 +45,34 @@ class Firewall (EventMixin):
                     continue
 
                 delay = int(rule[6])
-                if delay < 0:
+                if delay <= 0:
                     delay = 0
                     self.ruleDelays[rule_id] = \
                         "Delay adjusted from " + rule[6] + " to " + str(delay) + "s"
-                elif delay > 0:
+                        self.addFirewallRule(
+                            rule[1], 
+                            rule[2], 
+                            rule[3], 
+                            rule[4], 
+                            rule[5],
+                            str(delay)
+                        )
+                else:
                     self.ruleDelays[rule_id] = \
                         "Create a Timer instance with delay " + \
                         str(delay) + "s!"
-                else:
-                    self.ruleDelays[rule_id] = \
-                        "No delay for the rule " + str(delay) + "s"
+                    Timer(delay, lambda: 
+                        self.addFirewallRule(
+                            rule[1], 
+                            rule[2], 
+                            rule[3], 
+                            rule[4], 
+                            rule[5],
+                            str(delay)
+                        )
+                    ).start()
 
                 rule_id += 1
-
-                Timer(delay, lambda: 
-                    self.addFirewallRule(
-                        rule[1], 
-                        rule[2], 
-                        rule[3], 
-                        rule[4], 
-                        rule[5],
-                        str(delay)
-                    )
-                ).start()
-                
-                self.showFirewallRules()
-
-    def hello(self):
-        print "another rule added after delay"
 
     def showFirewallRules (self):
         message = "*** List Of Firewall Rules ***\n\n"
@@ -133,6 +132,7 @@ class Firewall (EventMixin):
             delay
         )
         log.info(message)
+        self.showFirewallRules()
 
     def delFirewallRule (
             self, 
