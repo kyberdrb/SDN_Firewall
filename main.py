@@ -253,7 +253,7 @@ class Firewall (EventMixin):
             match.nw_dst = IPAddr(src)
         msg.match = match
 
-        if action == "delete":
+        if action == "del":
             msg.command=of.OFPFC_DELETE
             msg.flags = of.OFPFF_SEND_FLOW_REM
             self.connection.send(msg)
