@@ -45,14 +45,14 @@ class Firewall (EventMixin):
                 if delay <= 0:
                     delay = 0
                     log.info("Delay adjusted from " + rule[6] + " to " + str(delay) + "s")
-                    self.addFirewallRule(
-                        rule[1], 
-                        rule[2], 
-                        rule[3], 
-                        rule[4], 
-                        rule[5], 
-                        str(delay))
-                else:
+                self.addFirewallRule(
+                    rule[1], 
+                    rule[2], 
+                    rule[3], 
+                    rule[4], 
+                    rule[5], 
+                    str(delay))
+                ''' else:
                     log.info("Adding rule after " + str(delay) + "s!")
                     delayedRule = rule
                     newDelay = delay
@@ -63,7 +63,7 @@ class Firewall (EventMixin):
                         delayedRule[4], 
                         delayedRule[5], 
                         str(newDelay))
-                    ).start()
+                    ).start() '''
 
                 rule_id += 1
 
