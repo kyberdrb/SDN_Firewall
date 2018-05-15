@@ -1,5 +1,3 @@
-import hashlib as checksum
-
 class Rule:
 
     """TODO - add an '_id' attribute with only a getter (@property, without setter).

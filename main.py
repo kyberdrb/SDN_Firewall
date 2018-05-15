@@ -8,6 +8,7 @@ import os
 import csv
 from threading import Timer
 import rule as fwrule
+import hashlib as checksum
 
 log = core.getLogger()
 
