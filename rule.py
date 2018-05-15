@@ -16,7 +16,7 @@ class Rule:
         self.ip_proto = ip_proto
         self.app_proto = app_proto
         self.expiration = expiration
-        #self._delay = delay
+        self.delay = delay
         '''self._id = generateID(
             self.src,
             self.dst,
@@ -26,16 +26,16 @@ class Rule:
 
     @property
     def delay(self):
-        return self._delay
+        return self.delay
 
     @delay.setter
     def delay(self, delay):
         if delay < 0:
-            self._delay = 0
+            self.delay = 0
         elif delay > 65535:
-            self._delay = 65535
+            self.delay = 65535
         else:
-            self._delay = delay
+            self.delay = delay
 
     '''def generateID(
             self
