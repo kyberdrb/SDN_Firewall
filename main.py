@@ -55,9 +55,7 @@ class Firewall (EventMixin):
                     rule[6]
                 )
 
-                newRule.helloWorld()
-
-                log.info("AWESOME" + newRule.ruleInfo() + "\n")
+                log.info(newRule.ruleInfo() + "\n")
 
                 delay = int(rule[6])
                 if delay <= 0:
