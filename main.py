@@ -47,13 +47,10 @@ class Firewall (EventMixin):
                 delay = int(rule[6])
                 if delay <= 0:
                     delay = 0
-                    self.ruleDelays[rule_id] = \
-                        "Delay adjusted from " + rule[6] + " to " + str(delay) + "s"
+                    log.info("Delay adjusted from " + rule[6] + " to " + str(delay) + "s")
                     self.addFirewallRule(rule[1], rule[2], rule[3], rule[4], rule[5], str(delay))
                 else:
-                    self.ruleDelays[rule_id] = \
-                        "Create a Timer instance with delay " + \
-                        str(delay) + "s!"
+                    log.info("Adding rule after " + str(delay) + "s!")
                     Timer(delay, lambda: self.addFirewallRule(rule[1], rule[2], rule[3], rule[4], rule[5],str(delay))).start()
 
                 rule_id += 1
