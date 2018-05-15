@@ -27,7 +27,7 @@ class Rule:
         )
 
     def generateID(
-            self
+            self,
             src,
             dst,
             ip_proto,
