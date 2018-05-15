@@ -15,6 +15,7 @@ class Firewall (EventMixin):
     def __init__ (self):
         self.listenTo(core.openflow)
         self.firewall = {}
+        self.ruleDelays = {}
         log.info("*** Starting SDN Firewall ***")
 
     def _handle_ConnectionUp (self, event):
@@ -35,20 +36,31 @@ class Firewall (EventMixin):
         with open(fwRules, "rb") as rules:
             rulesList = csv.reader(rules)
 
+            rule_id = 0
             for rule in rulesList:
                 if rule[0] == "id":
                     continue
+
+                delay = rule[6]
+                if delay < 0:
+                    delay = 0
+                
+                if delay > 0:
+                    self.ruleDelays[rule_id] = \
+                        "Create a 'Timer' instance with delay " + \
+                            delay + "s!"
+                rule_id += 1
+
                 self.addFirewallRule(
                     rule[1], 
                     rule[2], 
                     rule[3], 
                     rule[4], 
                     rule[5],
-                    rule[6])
+                    delay)
 
     def showFirewallRules (self):
         message = "*** List Of Firewall Rules ***\n\n"
-        rule_num = 1
         for item in self.firewall:
             if item[4] != "0":
                 message += self.ruleInfo(
@@ -59,8 +71,12 @@ class Firewall (EventMixin):
                     item[4],
                     item[5]
                 )
-            rule_num += 1
         log.info(message)
+        print(self.firewall)
+
+    def showRuleDelays (self):
+        for rule in self.ruleDelays:
+            log.info(rule)
 
     def addFirewallRule (
             self, 
