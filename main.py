@@ -26,12 +26,16 @@ class Firewall (EventMixin):
             dpidToStr(event.dpid) + \
             " have been successfuly updated")
 
-    def loadRules (self):
+    def openRulesFile(self, filename):
         fwPkgPath = os.path.abspath(
             os.path.dirname(__file__)
         )
-        fwRules = "fwRules.csv"
+        fwRules = filename
         fwRules = os.path.join(fwPkgPath, fwRules)
+        return fwRules
+
+    def loadRules (self):
+        fwRules = openRulesFile("fwRules.csv")
 
         with open(fwRules, "rb") as rules:
             rulesList = csv.reader(rules)
