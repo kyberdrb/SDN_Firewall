@@ -52,8 +52,8 @@ class Firewall (EventMixin):
                     ip_proto = rule[3], 
                     app_proto = rule[4], 
                     expiration = rule[5], 
+                    delay = rule[6]
                 )
-                newRule.delay(rule[6])
 
                 if int(newRule.delay) > 0:
                     log.info("Adding rule after " + newRule.delay + "s!")
