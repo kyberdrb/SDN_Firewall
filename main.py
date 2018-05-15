@@ -55,6 +55,8 @@ class Firewall (EventMixin):
                     log.info("Adding rule after " + str(delay) + "s!")
                     delayedRule = rule
                     newDelay = delay
+                    # Sice je nastaveny 'delay'
+                    # ale POX si to uvedomi az o cca 20 sekund neskor
                     Timer(delay, lambda: self.addFirewallRule(
                         delayedRule[1], 
                         delayedRule[2], 

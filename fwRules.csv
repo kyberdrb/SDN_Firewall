@@ -1,4 +1,4 @@
 id,host1,host2,ip_proto,app_proto,expiration,delay
 1,10.0.0.1,10.0.0.2,udp,any,10000,0
-2,10.0.0.2,10.0.0.3,icmp,any,10000,10
+2,10.0.0.2,10.0.0.3,icmp,any,10000,1
 3,10.0.0.1,10.0.0.3,tcp,http,10000,-15
