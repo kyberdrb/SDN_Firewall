@@ -81,7 +81,7 @@ class Firewall (EventMixin):
                 )
         log.info(message)
 
-        # Zaujimave, 'firewall' je Dictionary
+        # Zaujimave, 'firewall' je Dictionary
         # struktura s KOMPOZITNYM klucom
         #print(self.firewall)
 
