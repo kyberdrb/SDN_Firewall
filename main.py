@@ -58,13 +58,21 @@ class Firewall (EventMixin):
                     newDelay = delay
                     # Sice je nastaveny 'delay' na urcity pocet sekund, ale
                     # POX si to uvedomi az o dalsich cca 30 sekund neskor
-                    Timer(delay, lambda: self.addFirewallRule(
+                    ''' Timer(delay, lambda: self.addFirewallRule(
                         delayedRule[1], 
                         delayedRule[2], 
                         delayedRule[3], 
                         delayedRule[4], 
                         delayedRule[5], 
                         str(newDelay))
+                    ).start() '''
+                    Timer(delay, self.addFirewallRule, [
+                        delayedRule[1], 
+                        delayedRule[2], 
+                        delayedRule[3], 
+                        delayedRule[4], 
+                        delayedRule[5], 
+                        str(newDelay))]
                     ).start()
 
     def showFirewallRules (self):
