@@ -17,7 +17,7 @@ class Rule:
         self.app_proto = app_proto
         self.expiration = expiration
         self.delay = delay
-'''         self._id = generateID(
+        '''self._id = generateID(
             self.src,
             self.dst,
             self.ip_proto,
@@ -37,7 +37,7 @@ class Rule:
         else:
             self.delay = delay
 
-'''     def generateID(
+    '''def generateID(
             self
             src,
             dst,
@@ -45,7 +45,7 @@ class Rule:
             app_proto):
         # make a checksum of these parameters - one number/alplanumeric string '''
 
-'''     @property
+    '''@property
     def id(self):
         return _id '''
 
