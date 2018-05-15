@@ -18,7 +18,7 @@ class Rule:
         self.ip_proto = ip_proto
         self.app_proto = app_proto
         self.expiration = expiration
-        self.delay = delay)
+        self.delay = delay
 
     def ruleInfo (self):
         return  " src:" + self.src + \
