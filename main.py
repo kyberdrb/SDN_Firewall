@@ -16,7 +16,6 @@ class Firewall (EventMixin):
     def __init__ (self):
         self.listenTo(core.openflow)
         self.firewall = {}
-        self.ruleDelays = {}
         log.info("*** Starting SDN Firewall ***")
 
     def _handle_ConnectionUp (self, event):
@@ -27,7 +26,6 @@ class Firewall (EventMixin):
             dpidToStr(event.dpid) + \
             " have been successfuly updated")
         self.showFirewallRules()
-        self.showRuleDelays()
 
     def loadRules (self):
         fwPkgPath = os.path.abspath(
@@ -48,10 +46,24 @@ class Firewall (EventMixin):
                 if delay <= 0:
                     delay = 0
                     log.info("Delay adjusted from " + rule[6] + " to " + str(delay) + "s")
-                    self.addFirewallRule(rule[1], rule[2], rule[3], rule[4], rule[5], str(delay))
+                    self.addFirewallRule(
+                        rule[1], 
+                        rule[2], 
+                        rule[3], 
+                        rule[4], 
+                        rule[5], 
+                        str(delay))
                 else:
                     log.info("Adding rule after " + str(delay) + "s!")
-                    Timer(delay, lambda: self.addFirewallRule(rule[1], rule[2], rule[3], rule[4], rule[5],str(delay))).start()
+                    delayedRule = rule
+                    Timer(delay, lambda: self.addFirewallRule(
+                        delayedRule[1], 
+                        delayedRule[2], 
+                        delayedRule[3], 
+                        delayedRule[4], 
+                        delayedRule[5], 
+                        str(delay))
+                    ).start()
 
                 rule_id += 1
 
@@ -69,9 +81,6 @@ class Firewall (EventMixin):
                 )
         log.info(message)
         print(self.firewall)
-
-    def showRuleDelays (self):
-        print(self.ruleDelays)
 
     def addFirewallRule (
             self, 
