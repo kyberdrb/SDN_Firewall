@@ -23,8 +23,8 @@ class Firewall (EventMixin):
         log.info("Connection to the controller created")
         self.loadRules()
         log.info("Rules for the switch " + \
-            dpidToStr(event.dpid)) + \
-            " have been successfuly updated"
+            dpidToStr(event.dpid) + \
+            " have been successfuly updated")
         self.showFirewallRules()
         self.showRuleDelays()
 
