@@ -152,6 +152,7 @@ class Firewall (EventMixin):
             delay
         )
         log.info(message)
+        self.showFirewallRules()
 
     def pushRuleToSwitch (
             self, 
@@ -248,6 +249,20 @@ class Firewall (EventMixin):
         elif action == "add":
             self.connection.send(msg)
             log.info("Rule have been added to the switch - backward: H2 -> H1")
+
+    def showFirewallRules (self):
+        message = "*** List Of Firewall Rules ***\n\n"
+        for item in self.firewall:
+            if item[4] != "0":
+                message += self.ruleInfo(
+                    item[0], 
+                    item[1], 
+                    item[2], 
+                    item[3], 
+                    item[4],
+                    item[5]
+                )
+        log.info(message)
 
     def ruleInfo (
             self, 
