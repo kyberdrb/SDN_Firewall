@@ -24,20 +24,6 @@ class Rule:
             self.app_proto
         ) '''
 
-    @property
-    def delay(self):
-        return self.delay
-
-    @delay.setter
-    def delay(self, value):
-        print "Setting 'delay' value"
-        if value < 0:
-            self.delay = 0
-        elif value > 65535:
-            self.delay = 65535
-        else:
-            self.delay = value
-
     '''def generateID(
             self
             src,

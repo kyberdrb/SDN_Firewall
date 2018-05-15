@@ -55,8 +55,6 @@ class Firewall (EventMixin):
                     delay = rule[6]
                 )
 
-                newRule.delay = rule[6]
-
                 if int(newRule.delay) > 0:
                     log.info("Adding rule after " + newRule.delay + "s!")
                     # Sice je nastaveny 'delay' na urcity pocet sekund, ale
@@ -67,6 +65,10 @@ class Firewall (EventMixin):
                         [newRule]
                     ).start()
                 else:
+                    if value > 65535:
+                        newRule.delay = 65535
+                    else:
+                        newRule.delay = 0
                     self.addFirewallRule(newRule)
 
     def addFirewallRule (
