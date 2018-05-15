@@ -84,8 +84,7 @@ class Firewall (EventMixin):
         if  (src, 
             dst, 
             ip_proto, 
-            app_proto, 
-            expiration) in self.firewall:
+            app_proto) in self.firewall:
                 message = "Rule exists: drop:"
         else:
             self.firewall[(
@@ -170,7 +169,8 @@ class Firewall (EventMixin):
             )
         )
 
-        # Setting the expiration of the rule
+        # TODO - if 'expiration' is equal to 0 the rule will persist; negative value will be changed to 0, positive value is max. 65535
+        # Setting the expiration of the rule (in seconds)
         expiry = int(expiration)
         msg.hard_timeout = expiry
 
