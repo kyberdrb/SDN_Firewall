@@ -32,12 +32,12 @@ class Rule:
             dst,
             ip_proto,
             app_proto):
-        h = hashlib.md5()
-        h.update(src)
-        h.update(dst)
-        h.update(ip_proto)
-        h.update(app_proto)
-        return h.hexdigest()
+        id = checksum.md5()
+        id.update(src)
+        id.update(dst)
+        id.update(ip_proto)
+        id.update(app_proto)
+        return id.hexdigest()
 
     @property
     def id(self):
