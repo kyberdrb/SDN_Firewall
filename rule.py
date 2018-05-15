@@ -15,14 +15,7 @@ class Rule:
         self.expiration = expiration
         self.delay = delay
 
-    def ruleInfo (
-            self, 
-            src, 
-            dst, 
-            ip_proto, 
-            app_proto, 
-            expiration,
-            delay):
+    def ruleInfo (self):
         return  " src:" + self.src + \
                 " dst:" + self.dst + \
                 " ip_proto:" + self.ip_proto + \
