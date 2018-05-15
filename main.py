@@ -249,7 +249,7 @@ class Firewall (EventMixin):
                     item[2], 
                     item[3], 
                     item[4],
-                    item[5]
+                    str(item[5])
                 )
         log.info(message)
 
