@@ -57,74 +57,52 @@ class Firewall (EventMixin):
 
                 log.info(newRule.ruleInfo() + "\n")
 
-                delay = int(rule[6])
-                if delay <= 0:
-                    delay = 0
-                    log.info("Delay adjusted from " + \
-                        rule[6] + " to " + str(delay) + "s")
-                    self.addFirewallRule(
-                        rule[1], 
-                        rule[2], 
-                        rule[3], 
-                        rule[4], 
-                        rule[5], 
-                        str(delay))
-                else:
+                if newRule.delay > 0:
                     log.info("Adding rule after " + str(delay) + "s!")
-                    delayedRule = rule
-                    newDelay = delay
                     # Sice je nastaveny 'delay' na urcity pocet sekund, ale
                     # POX si to uvedomi az o dalsich cca 30 sekund neskor
-                    Timer(delay, self.addFirewallRule, [
-                        delayedRule[1], 
-                        delayedRule[2], 
-                        delayedRule[3], 
-                        delayedRule[4], 
-                        delayedRule[5], 
-                        str(newDelay)]
-                    ).start()
+                    Timer(delay, self.addFirewallRule, [newRule]).start()
+                else:
+                    self.addFirewallRule(newRule)
 
     def addFirewallRule (
             self, 
-            src=0, 
-            dst=0, 
-            ip_proto=0, 
-            app_proto=0, 
-            expiration = 0, 
-            delay = 0,
+            rule,
             value=True):
-        if  (src, 
-            dst, 
-            ip_proto, 
-            app_proto) in self.firewall:
+        # TODO - porovnavanie dat do samostatnej metody
+        if  (rule.src, 
+            rule.dst, 
+            rule.ip_proto, 
+            rule.app_proto) in self.firewall:
                 message = "Rule exists: drop:"
         else:
             self.firewall[(
-                src, 
-                dst, 
-                ip_proto, 
-                app_proto, 
-                expiration,
-                delay)] = value
+                rule.src, 
+                rule.dst, 
+                rule.ip_proto, 
+                rule.app_proto, 
+                rule.expiration,
+                rule.delay)] = value
             self.pushRuleToSwitch(
-                src, 
-                dst, 
-                ip_proto, 
-                app_proto, 
-                expiration
+                rule.src, 
+                rule.dst, 
+                rule.ip_proto, 
+                rule.app_proto, 
+                rule.expiration
             )
             message = "Rule added: drop:"
         message += self.ruleInfo(
-            src, 
-            dst, 
-            ip_proto, 
-            app_proto, 
-            expiration,
-            delay
+            rule.src, 
+            rule.dst, 
+            rule.ip_proto, 
+            rule.app_proto, 
+            rule.expiration,
+            rule.delay
         )
         log.info(message)
         self.showFirewallRules()
 
+    # TODO - add 'rule' parameter + edit all parameter like: 'src' to 'rule.src' etc. -> see 'addFirewallRule' method
     def delFirewallRule (
             self, 
             src=0, 
