@@ -25,7 +25,6 @@ class Firewall (EventMixin):
         log.info("Rules for the switch " + \
             dpidToStr(event.dpid) + \
             " have been successfuly updated")
-        #self.showFirewallRules()
 
     def loadRules (self):
         fwPkgPath = os.path.abspath(
@@ -56,13 +55,14 @@ class Firewall (EventMixin):
                 else:
                     log.info("Adding rule after " + str(delay) + "s!")
                     delayedRule = rule
+                    newDelay = delay
                     Timer(delay, lambda: self.addFirewallRule(
                         delayedRule[1], 
                         delayedRule[2], 
                         delayedRule[3], 
                         delayedRule[4], 
                         delayedRule[5], 
-                        str(delay))
+                        str(newDelay))
                     ).start()
 
                 rule_id += 1
