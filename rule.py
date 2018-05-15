@@ -42,4 +42,4 @@ class Rule:
                 " ip_proto:" + self.ip_proto + \
                 " app_proto:" + self.app_proto + \
                 " expiration:" + self.expiration + "s" + \
-                " delay:" + self.delay + "s"
+                " delay:" + str(self.delay) + "s"
