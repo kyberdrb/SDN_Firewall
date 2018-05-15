@@ -89,13 +89,14 @@ class Firewall (EventMixin):
             rule, 
             ruleID,
             value=True):
-        # TODO - porovnavanie dat do samostatnej metody
+        # TODO - porovnavanie dat do samostatnej metody - porovnavat checksumy, kluce vo 'firewall' Dictionary, pre jednotlive pravidla - porovnavanie by potom vyzeralo takto: if ruleID in self.firewall: ...
         if  (rule.src, 
             rule.dst, 
             rule.ip_proto, 
             rule.app_proto) in self.firewall:
                 message = "Rule exists: drop:"
         else:
+            # TODO - upravit pridavanie pravidla - odstranit 'value' parameter -> potom do struktury 'firewall' pridavat pravidla sposobom: self.firewall[ruleID] = rule
             self.firewall[(
                 rule.src, 
                 rule.dst, 
@@ -116,7 +117,7 @@ class Firewall (EventMixin):
         log.info(message)
         self.showFirewallRules()
 
-    # TODO - add 'rule' parameter + edit all parameter like: 'src' to 'rule.src' etc. -> see 'addFirewallRule' method
+    # TODO - basically, make this method look like the 'addFirewallRule': add 'rule' parameter + edit all parameters like: 'src' to 'rule.src' etc. -> see 'addFirewallRule' method
     def delFirewallRule (
             self, 
             src=0, 
@@ -173,7 +174,7 @@ class Firewall (EventMixin):
             )
         )
 
-        # TODO - if 'expiration' is equal to 0 the rule will persist; negative value will be changed to 0, positive value is max. 65535
+        # TODO - if 'expiration' is equal to 0 the rule will persist
         # Setting the expiration of the rule (in seconds)
         expiry = int(expiration)
         msg.hard_timeout = expiry
