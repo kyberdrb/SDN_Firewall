@@ -93,14 +93,7 @@ class Firewall (EventMixin):
                 rule.expiration
             )
             message = "Rule added: drop:"
-        message += self.ruleInfo(
-            rule.src, 
-            rule.dst, 
-            rule.ip_proto, 
-            rule.app_proto, 
-            rule.expiration,
-            rule.delay
-        )
+        message += rule.ruleInfo()
         log.info(message)
         self.showFirewallRules()
 
