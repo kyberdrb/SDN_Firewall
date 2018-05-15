@@ -22,9 +22,11 @@ class Firewall (EventMixin):
         self.connection = event.connection
         log.info("Connection to the controller created")
         self.loadRules()
+        log.info("Rules for the switch " + \
+            dpidToStr(event.dpid)) + \
+            " have been successfuly updated"
         self.showFirewallRules()
-        log.info("Updating rules for the switch " + \
-            dpidToStr(event.dpid))
+        self.showRuleDelays()
 
     def loadRules (self):
         fwPkgPath = os.path.abspath(
