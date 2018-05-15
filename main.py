@@ -36,7 +36,6 @@ class Firewall (EventMixin):
         with open(fwRules, "rb") as rules:
             rulesList = csv.reader(rules)
 
-            rule_id = 0
             for rule in rulesList:
                 if rule[0] == "id":
                     continue
@@ -64,8 +63,6 @@ class Firewall (EventMixin):
                         delayedRule[5], 
                         str(newDelay))
                     ).start()
-
-                rule_id += 1
 
     def showFirewallRules (self):
         message = "*** List Of Firewall Rules ***\n\n"
@@ -208,7 +205,7 @@ class Firewall (EventMixin):
 
 ###################################################################
 
-        #Application protocol match
+        # Application protocol match
         if app_proto == "ftp":
             match.tp_dst = 21
         elif app_proto == "http":
