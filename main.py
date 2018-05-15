@@ -58,14 +58,6 @@ class Firewall (EventMixin):
                     newDelay = delay
                     # Sice je nastaveny 'delay' na urcity pocet sekund, ale
                     # POX si to uvedomi az o dalsich cca 30 sekund neskor
-                    ''' Timer(delay, lambda: self.addFirewallRule(
-                        delayedRule[1], 
-                        delayedRule[2], 
-                        delayedRule[3], 
-                        delayedRule[4], 
-                        delayedRule[5], 
-                        str(newDelay))
-                    ).start() '''
                     Timer(delay, self.addFirewallRule, [
                         delayedRule[1], 
                         delayedRule[2], 
@@ -199,7 +191,7 @@ class Firewall (EventMixin):
         # creating a match structure
         match = of.ofp_match()
 
-        # set packet ethernet type as IP
+        # set packet ethernet type as IPv4
         match.dl_type = 0x800;
 
 ###################################################################
@@ -247,8 +239,10 @@ class Firewall (EventMixin):
             msg.command=of.OFPFC_DELETE
             msg.flags = of.OFPFF_SEND_FLOW_REM
             self.connection.send(msg)
+            log.info("Rule have been removed from the switch - forward: H1 -> H2")
         elif action == "add":
             self.connection.send(msg)
+            log.info("Rule have been added to the switch - forward: H1 -> H2"")
 
 ###################
 
@@ -263,8 +257,10 @@ class Firewall (EventMixin):
             msg.command=of.OFPFC_DELETE
             msg.flags = of.OFPFF_SEND_FLOW_REM
             self.connection.send(msg)
+            log.info("Rule have been removed from the switch - backward: H2 -> H1")
         elif action == "add":
             self.connection.send(msg)
+            log.info("Rule have been added to the switch - backward: H2 -> H1")
 
     def ruleInfo (
             self, 
