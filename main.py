@@ -72,7 +72,7 @@ class Firewall (EventMixin):
                         delayedRule[3], 
                         delayedRule[4], 
                         delayedRule[5], 
-                        str(newDelay))]
+                        str(newDelay)]
                     ).start()
 
     def showFirewallRules (self):
