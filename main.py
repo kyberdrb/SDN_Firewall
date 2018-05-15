@@ -77,8 +77,7 @@ class Firewall (EventMixin):
         print(self.firewall)
 
     def showRuleDelays (self):
-        for rule in self.ruleDelays:
-            log.info(rule)
+        print(self.ruleDelays)
 
     def addFirewallRule (
             self, 
