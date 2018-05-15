@@ -35,7 +35,7 @@ class Firewall (EventMixin):
         return fwRules
 
     def loadRules (self):
-        fwRules = openRulesFile("fwRules.csv")
+        fwRules = self.openRulesFile("fwRules.csv")
 
         with open(fwRules, "rb") as rules:
             rulesList = csv.reader(rules)
