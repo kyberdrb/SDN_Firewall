@@ -55,10 +55,8 @@ class Firewall (EventMixin):
                     delay=rule[6]
                 )
 
-                log.info(newRule.ruleInfo() + "\n")
-
-                if newRule.delay > 0:
-                    log.info("Adding rule after " + str(delay) + "s!")
+                if int(newRule.delay) > 0:
+                    log.info("Adding rule after " + newRule.delay + "s!")
                     # Sice je nastaveny 'delay' na urcity pocet sekund, ale
                     # POX si to uvedomi az o dalsich cca 30 sekund neskor
                     Timer(delay, self.addFirewallRule, [newRule]).start()
