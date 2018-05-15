@@ -64,7 +64,8 @@ class Firewall (EventMixin):
                     rule[3], 
                     rule[4], 
                     rule[5],
-                    delay)
+                    str(delay)
+                )
 
     def showFirewallRules (self):
         message = "*** List Of Firewall Rules ***\n\n"
