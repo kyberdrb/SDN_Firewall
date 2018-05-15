@@ -7,6 +7,7 @@ from pox.lib.addresses import EthAddr, IPAddr
 import os
 import csv
 from threading import Timer
+import rule
 
 log = core.getLogger()
 
@@ -277,7 +278,7 @@ class Firewall (EventMixin):
                 " ip_proto:" + ip_proto + \
                 " app_proto:" + app_proto + \
                 " expiration:" + expiration + "s" + \
-                " delay:" + delay + "\n"
+                " delay:" + delay + "s\n"
 
 def launch ():
     core.registerNew(Firewall)
