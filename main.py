@@ -36,6 +36,9 @@ class Firewall (EventMixin):
         fwRules = "fwRules.csv"
         fwRules = os.path.join(fwPkgPath, fwRules)
 
+        t = Timer(10, self.hello)
+        t.start()
+
         with open(fwRules, "rb") as rules:
             rulesList = csv.reader(rules)
 
@@ -58,9 +61,6 @@ class Firewall (EventMixin):
                         "No delay for the rule " + str(delay) + "s"
 
                 rule_id += 1
-
-                t = Timer(10, self.hello)
-                t.start()
 
                 self.addFirewallRule(
                     rule[1], 
