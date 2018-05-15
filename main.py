@@ -46,7 +46,7 @@ class Firewall (EventMixin):
                 if rule[0] == "id":
                     continue
 
-                newRule = fwrule(
+                newRule = fwrule.Rule(
                     rule[1], 
                     rule[2], 
                     rule[3], 
@@ -56,7 +56,7 @@ class Firewall (EventMixin):
                 )
 
                 newRule.helloWorld()
-                
+
                 log.info("AWESOME" + newRule.ruleInfo() + "\n")
 
                 delay = int(rule[6])
