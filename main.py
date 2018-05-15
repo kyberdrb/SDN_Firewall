@@ -80,7 +80,10 @@ class Firewall (EventMixin):
                     item[5]
                 )
         log.info(message)
-        print(self.firewall)
+
+        # Zaujimave, 'firewall' je Dictionary
+        # struktura s KOMPOZITNYM klucom
+        #print(self.firewall)
 
     def addFirewallRule (
             self, 
