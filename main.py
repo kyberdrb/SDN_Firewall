@@ -55,6 +55,8 @@ class Firewall (EventMixin):
                     delay = rule[6]
                 )
 
+                ruleID = self.generateRuleID(newRule)
+
                 if int(newRule.delay) > 0:
                     log.info("Adding rule after " + newRule.delay + "s!")
                     # Sice je nastaveny 'delay' na urcity pocet sekund, ale
@@ -62,18 +64,29 @@ class Firewall (EventMixin):
                     Timer(
                         int(newRule.delay), 
                         self.addFirewallRule, 
-                        [newRule]
+                        [newRule, ruleID]
                     ).start()
                 else:
                     if int(newRule.delay) > 65535:
                         newRule.delay = 65535
                     else:
                         newRule.delay = 0
-                    self.addFirewallRule(newRule)
+                    self.addFirewallRule(newRule, ruleID)
+
+    def generateRuleID(
+            self,
+            rule):
+        id = checksum.md5()
+        id.update(rule.src)
+        id.update(rule.dst)
+        id.update(rule.ip_proto)
+        id.update(rule.app_proto)
+        return id.hexdigest()
 
     def addFirewallRule (
             self, 
-            rule,
+            rule, 
+            ruleID,
             value=True):
         # TODO - porovnavanie dat do samostatnej metody
         if  (rule.src, 
@@ -97,6 +110,7 @@ class Firewall (EventMixin):
                 rule.expiration
             )
             message = "Rule added: drop:"
+        message += ruleID
         message += rule.ruleInfo()
         log.info(message)
         self.showFirewallRules()

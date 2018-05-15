@@ -18,34 +18,10 @@ class Rule:
         self.ip_proto = ip_proto
         self.app_proto = app_proto
         self.expiration = expiration
-        self.delay = delay
-        self._id = self.generateID(
-            self.src,
-            self.dst,
-            self.ip_proto,
-            self.app_proto
-        )
-
-    def generateID(
-            self,
-            src,
-            dst,
-            ip_proto,
-            app_proto):
-        id = checksum.md5()
-        id.update(src)
-        id.update(dst)
-        id.update(ip_proto)
-        id.update(app_proto)
-        return id.hexdigest()
-
-    @property
-    def id(self):
-        return _id
+        self.delay = delay)
 
     def ruleInfo (self):
-        return  "id:" + self._id + \
-                " src:" + self.src + \
+        return  " src:" + self.src + \
                 " dst:" + self.dst + \
                 " ip_proto:" + self.ip_proto + \
                 " app_proto:" + self.app_proto + \
