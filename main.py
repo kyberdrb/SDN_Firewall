@@ -36,8 +36,7 @@ class Firewall (EventMixin):
         fwRules = "fwRules.csv"
         fwRules = os.path.join(fwPkgPath, fwRules)
 
-        t = Timer(10, self.hello)
-        t.start()
+        Timer(10, self.hello).start()
 
         with open(fwRules, "rb") as rules:
             rulesList = csv.reader(rules)
