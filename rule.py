@@ -10,13 +10,13 @@ class Rule:
             ip_proto, 
             app_proto, 
             expiration,
-            delay):
+            delay = 0):
         self.src = src
         self.dst = dst
         self.ip_proto = ip_proto
         self.app_proto = app_proto
         self.expiration = expiration
-        self._delay = delay
+        #self._delay = delay
         '''self._id = generateID(
             self.src,
             self.dst,
