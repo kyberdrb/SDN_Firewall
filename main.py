@@ -169,7 +169,7 @@ class Firewall (EventMixin):
             )
         )
 
-        # TODO - if 'expiration' is equal to 0 the rule will persist; negative value will be changed to 0, positive value is max. 65535
+        # TODO - if 'expiration' is equal to 0 the rule will persist; negative value will be changed to 0, positive value is max. 65535
         # Setting the expiration of the rule (in seconds)
         expiry = int(expiration)
         msg.hard_timeout = expiry
