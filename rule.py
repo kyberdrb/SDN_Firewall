@@ -1,3 +1,5 @@
+import hashlib as checksum
+
 class Rule:
 
     """TODO - add an '_id' attribute with only a getter (@property, without setter).
@@ -17,27 +19,33 @@ class Rule:
         self.app_proto = app_proto
         self.expiration = expiration
         self.delay = delay
-        '''self._id = generateID(
+        self._id = generateID(
             self.src,
             self.dst,
             self.ip_proto,
             self.app_proto
-        ) '''
+        )
 
-    '''def generateID(
+    def generateID(
             self
             src,
             dst,
             ip_proto,
             app_proto):
-        # make a checksum of these parameters - one number/alplanumeric string '''
+        h = hashlib.md5()
+        h.update(src)
+        h.update(dst)
+        h.update(ip_proto)
+        h.update(app_proto)
+        return h.hexdigest()
 
-    '''@property
+    @property
     def id(self):
-        return _id '''
+        return _id
 
     def ruleInfo (self):
-        return  " src:" + self.src + \
+        return  "id:" + self._id + \
+                " src:" + self.src + \
                 " dst:" + self.dst + \
                 " ip_proto:" + self.ip_proto + \
                 " app_proto:" + self.app_proto + \
