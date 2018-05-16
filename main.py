@@ -85,26 +85,15 @@ class Firewall (EventMixin):
         id.update(rule.app_proto)
         return id.hexdigest()
 
-    def addFirewallRule (
-            self, 
-            rule, 
-            ruleID,
-            value=True):
+    def addFirewallRule (self, rule, ruleID):
         # TODO - porovnavanie dat do samostatnej metody - porovnavat checksumy, kluce vo 'firewall' Dictionary, pre jednotlive pravidla - porovnavanie by potom vyzeralo takto: if ruleID in self.firewall: ...
-        if  (rule.src, 
-            rule.dst, 
-            rule.ip_proto, 
-            rule.app_proto) in self.firewall:
+        # TODO - OTESTOVAT
+        if ruleID in self.firewall:
                 message = "Rule exists: drop:"
         else:
-            # TODO - upravit pridavanie pravidla - odstranit 'value' parameter -> potom do struktury 'firewall' pridavat pravidla sposobom: self.firewall[ruleID] = rule
-            self.firewall[(
-                rule.src, 
-                rule.dst, 
-                rule.ip_proto, 
-                rule.app_proto, 
-                rule.expiration,
-                rule.delay)] = value
+            # TODO - upravit pridavanie pravidla - odstranit 'value' parameter -> potom do struktury 'firewall' pridavat pravidla sposobom: self.firewall[ruleID] = rule
+            # TODO - OTESTOVAT
+            self.firewall[ruleID] = rule
             self.pushRuleToSwitch(
                 rule.src, 
                 rule.dst, 
@@ -148,14 +137,14 @@ class Firewall (EventMixin):
                 message = "Rule Deleted: drop:"
         else:
             message = "Rule doesn't exist: drop:"
-        message += self.ruleInfo(
+        ''' message += self.ruleInfo(
             src, 
             dst, 
             ip_proto, 
             app_proto, 
             expiration,
             delay
-        )
+        ) '''
         log.info(message)
         self.showFirewallRules()
 
@@ -259,32 +248,9 @@ class Firewall (EventMixin):
 
     def showFirewallRules (self):
         message = "    *** LIST OF FIREWALL RULES ***\n\n"
-        for item in self.firewall:
-            if item[4] != "0":
-                message += self.ruleInfo(
-                    item[0], 
-                    item[1], 
-                    item[2], 
-                    item[3], 
-                    item[4],
-                    str(item[5])
-                )
+        for rule in self.firewall:
+            message += rule + "\n"
         log.info(message)
-
-    def ruleInfo (
-            self, 
-            src, 
-            dst, 
-            ip_proto, 
-            app_proto, 
-            expiration,
-            delay):
-        return  " src:" + src + \
-                " dst:" + dst + \
-                " ip_proto:" + ip_proto + \
-                " app_proto:" + app_proto + \
-                " expiration:" + expiration + "s" + \
-                " delay:" + delay + "s\n"
 
 def launch ():
     core.registerNew(Firewall)
