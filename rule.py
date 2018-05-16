@@ -3,7 +3,7 @@ class Rule:
     """TODO - add an '_id' attribute with only a getter (@property, without setter).
     It will be calculated from src, dst, ip_proto and app_proto as a sha256 value.
     This attribute will be then used for comparing duplicate rules"""
-    def __init__(
+    def __init__ (
             self,
             src, 
             dst, 
@@ -18,7 +18,7 @@ class Rule:
         self.expiration = expiration
         self.delay = delay
 
-    def ruleInfo (self):
+    def __str__ (self):
         return  " src:" + self.src + \
                 " dst:" + self.dst + \
                 " ip_proto:" + self.ip_proto + \
