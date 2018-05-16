@@ -87,13 +87,13 @@ class Firewall (EventMixin):
                 message = "Rule exists: drop:"
         else:
             self.firewall[ruleID] = rule
-            self.pushRuleToSwitch(
-                rule.src, 
+            self.pushRuleToSwitch(rule)
+            '''     rule.src, 
                 rule.dst, 
                 rule.ip_proto, 
                 rule.app_proto, 
                 rule.expiration
-            )
+            ) '''
             message = "Rule added: drop:"
         message += " id:" + ruleID + " " + str(rule)
         log.info(message)
@@ -140,13 +140,14 @@ class Firewall (EventMixin):
         log.info(message)
         self.showFirewallRules()
 
-    def pushRuleToSwitch (
+    ''' def pushRuleToSwitch (
             self, 
             src, 
             dst, 
             ip_proto, 
             app_proto, 
-            expiration):
+            expiration): '''
+    def pushRuleToSwitch (self, rule):
         # creating a switch flow table entry
         msg = of.ofp_flow_mod()
         msg.priority = 20
@@ -159,8 +160,7 @@ class Firewall (EventMixin):
         # TODO - if 'expiration' is equal to 0 the rule will persist
         # TODO - after rule expiration, remove it from the 'firewall' datastructure
         # Setting the expiration of the rule (in seconds)
-        expiry = int(expiration)
-        msg.hard_timeout = expiry
+        msg.hard_timeout = int(rule.expiration)
 
 ###################################################################
 
@@ -173,31 +173,31 @@ class Firewall (EventMixin):
 ###################################################################
 
         # IP protocol match
-        if ip_proto == "tcp":
+        if rule.ip_proto == "tcp":
             match.nw_proto = pkt.ipv4.TCP_PROTOCOL
-        if ip_proto == "udp":
+        if rule.ip_proto == "udp":
             match.nw_proto = pkt.ipv4.UDP_PROTOCOL
-        elif ip_proto == "icmp":
+        elif rule.ip_proto == "icmp":
             match.nw_proto = pkt.ipv4.ICMP_PROTOCOL
-        elif ip_proto == "igmp":
+        elif rule.ip_proto == "igmp":
             match.nw_proto = pkt.ipv4.IGMP_PROTOCOL
 
 ###################################################################
 
         # Application protocol match
-        if app_proto == "ftp":
+        if rule.app_proto == "ftp":
             match.tp_dst = 21
-        elif app_proto == "http":
+        elif rule.app_proto == "http":
             match.tp_dst = 80
-        elif app_proto == "telnet":
+        elif rule.app_proto == "telnet":
             match.tp_dst = 23
-        elif app_proto == "smtp":
+        elif rule.app_proto == "smtp":
             match.tp_dst = 25
 
 ###################################################################
 
         # Decide, whether the rule should be kept or removed
-        if expiry == 0:
+        if int(rule.expiration) == 0:
             action = "del"
         else:
             action = "add"
@@ -205,10 +205,10 @@ class Firewall (EventMixin):
 ###################################################################
 
         # flow rule for src:host1 dst:host2
-        if src != "any":
-            match.nw_src = IPAddr(src)
-        if dst != "any":
-            match.nw_dst = IPAddr(dst)
+        if rule.src != "any":
+            match.nw_src = IPAddr(rule.src)
+        if rule.dst != "any":
+            match.nw_dst = IPAddr(rule.dst)
         msg.match = match
 
         if action == "del":
@@ -223,10 +223,10 @@ class Firewall (EventMixin):
 ###################
 
         # flow rule for src:host2 dst:host1
-        if dst != "any":
-            match.nw_src = IPAddr(dst)
-        if src != "any":
-            match.nw_dst = IPAddr(src)
+        if rule.dst != "any":
+            match.nw_src = IPAddr(rule.dst)
+        if rule.src != "any":
+            match.nw_dst = IPAddr(rule.src)
         msg.match = match
 
         if action == "del":
