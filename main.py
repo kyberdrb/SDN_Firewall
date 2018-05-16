@@ -253,6 +253,7 @@ class Firewall (EventMixin):
         for ruleID,rule in self.firewall.items():
             message += "id: " + ruleID + " " + str(rule) + "\n"
         ''' print self.firewall '''
+        log.info(message)
 
 def launch ():
     core.registerNew(Firewall)
