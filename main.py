@@ -135,30 +135,33 @@ class Firewall (EventMixin):
         self.showFirewallRules()
 
     def pushRuleToSwitch (self, rule):
-        # creating a switch flow table entry
+        # TODO - Move the creating of a switch flow table entry to a separate method
         msg = of.ofp_flow_mod()
+
+        # TODO - Move the setting of rule priority to a separate method
         msg.priority = 20
+
+        # TODO - Move the setting of rule action to a separate method. The 'of.OFPP_NONE' in 'ofp_action_output' means, that the traffic, that matches with the rule, will be dropped
         msg.actions.append(
             of.ofp_action_output(
                 port=of.OFPP_NONE
             )
         )
 
-        # TODO - Move rule expiration (in seconds) setting to separate method
-        # TODO - after rule expiration, remove it from the 'firewall' datastructure
+        # TODO - Remove the rule from the 'firewall' datastructure after its expiration - maybe create another Timer at the time, when the rule is added to the 'firewall' datastructure, that will call the 'delFirewallRule' method
         msg.hard_timeout = int(rule.expiration)
 
 ###################################################################
 
-        # creating a match structure
+        # TODO - Move the creating of a match structure to a separate method
         match = of.ofp_match()
 
-        # set packet ethernet type as IPv4
+        # TODO - Move setting packet ethernet type as IPv4 to a separate method
         match.dl_type = 0x800;
 
 ###################################################################
 
-        # IP protocol match
+        # TODO - Move the transport protocol matching to a separate class 'TransportProtocol' to a method 'number'
         if rule.ip_proto == "tcp":
             match.nw_proto = pkt.ipv4.TCP_PROTOCOL
         if rule.ip_proto == "udp":
@@ -172,7 +175,7 @@ class Firewall (EventMixin):
 
 ###################################################################
 
-        # Application protocol match
+        # TODO - Move the application protocol matching to a separate class 'AppProtocol' to a method 'number'
         if rule.app_proto == "ftp":
             match.tp_dst = 21
         elif rule.app_proto == "http":
@@ -187,8 +190,9 @@ class Firewall (EventMixin):
 ###################################################################
 
         # TODO - the logic, whether the rule should be kept or removed, should be in another method - this method should only add/remove rules to/from switch
-        # TODO - interfering with persistent rules
-        ''' if int(rule.expiration) == 0:
+        
+        '''# TODO - interfering with persistent rules
+         if int(rule.expiration) == 0:
             action = "del"
         else:
             action = "add" '''
@@ -197,13 +201,14 @@ class Firewall (EventMixin):
 
 ###################################################################
 
-        # flow rule for src:host1 dst:host2
+        # TODO - Move the setting of the flow rule for src:host1 dst:host2 in the match structure to a separate method 'def matchIPAddr(self, host1, host2)'
         if rule.src != "any":
             match.nw_src = IPAddr(rule.src)
         if rule.dst != "any":
             match.nw_dst = IPAddr(rule.dst)
         msg.match = match
 
+        # TODO - Move the rule addition/removal to/from the switch to a separate method. Again, this logic, whether to add/remove rule to/from a switch should be two separate methods
         if action == "del":
             msg.command=of.OFPFC_DELETE
             msg.flags = of.OFPFF_SEND_FLOW_REM
@@ -215,13 +220,14 @@ class Firewall (EventMixin):
 
 ###################
 
-        # flow rule for src:host2 dst:host1
+        # TODO - Move the setting of the flow rule for src:host2 dst:host1 in the match structure to a separate method 'def matchIPAddr(self, host1, host2)' - same method as with the flow rule for src:host1 dst:host2
         if rule.dst != "any":
             match.nw_src = IPAddr(rule.dst)
         if rule.src != "any":
             match.nw_dst = IPAddr(rule.src)
         msg.match = match
 
+        # TODO - Move the rule addition/removal to/from the switch to a separate method. Again, this logic, whether to add/remove rule to/from a switch should be two separate methods
         if action == "del":
             msg.command=of.OFPFC_DELETE
             msg.flags = of.OFPFF_SEND_FLOW_REM
