@@ -103,11 +103,11 @@ class Firewall (EventMixin):
             )
             message = "Rule added: drop:"
         message += ruleID
-        message += rule
+        message += str(rule)
         log.info(message)
         self.showFirewallRules()
 
-    # TODO - basically, make this method look like the 'addFirewallRule': add 'rule' parameter + edit all parameters like: 'src' to 'rule.src' etc. -> see 'addFirewallRule' method
+    # TODO - basically, make this method should look similar to the 'addFirewallRule': add 'rule' parameter + edit all parameters like: 'src' to 'rule.src' etc. -> see 'addFirewallRule' method
     def delFirewallRule (
             self, 
             src=0, 
@@ -246,12 +246,13 @@ class Firewall (EventMixin):
             self.connection.send(msg)
             log.info("Rule have been added to the switch - backward: H2 -> H1")
 
+    # TODO - OTESTOVAT
     def showFirewallRules (self):
         message = "    *** LIST OF FIREWALL RULES ***\n\n"
+        log.info(message)
         ''' for rule in self.firewall:
             message += "id: " + rule + " " + str(rule) + "\n" '''
         print self.firewall
-        log.info(message)
 
 def launch ():
     core.registerNew(Firewall)
