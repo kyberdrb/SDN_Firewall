@@ -240,7 +240,7 @@ class Firewall (EventMixin):
 
     def showFirewallRules (self):
         message = "\n                         " + \
-            + "*** LIST OF FIREWALL RULES ***\n\n"
+            "*** LIST OF FIREWALL RULES ***\n\n"
         for ruleID,rule in self.firewall.items():
             message += "id: " + ruleID + " " + str(rule) + "\n"
         log.info(message)
