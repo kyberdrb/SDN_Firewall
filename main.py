@@ -21,26 +21,23 @@ class Firewall (EventMixin):
 
     def _handle_ConnectionUp (self, event):
         self.connection = event.connection
-        log.info("Connection to the controller created")
-        self.loadRules()
-        log.info("Rules for the switch " + \
+        log.info(
+            "Switch [ID:" + \
             dpidToStr(event.dpid) + \
-            " have been successfuly updated")
-
-    def loadRules (self):
-        fwRules = self.openRulesFile("fwRules.csv")
-        self.addRules(fwRules)
-
-    def openRulesFile(self, filename):
-        fwPkgPath = os.path.abspath(
-            os.path.dirname(__file__)
+            "] has been successfully connected" + \
+            "to the controller"
         )
-        fwRules = filename
-        fwRules = os.path.join(fwPkgPath, fwRules)
-        return fwRules
+        rules = self.rulesFilePath("fwRules.csv")
+        self.addRulesFromFile(rules)
 
-    def addRules(self, fileWithRules):
-        with open(fileWithRules, "rb") as rules:
+    def rulesFilePath (self, rulesFileName):
+        currentDir = os.path.dirname(__file__)
+        fwPkgPath = os.path.abspath(currentDir)
+        fwRulesPath = os.path.join(fwPkgPath, rulesFileName)
+        return fwRulesPath
+
+    def addRulesFromFile(self, rulesFile):
+        with open(rulesFile, "rb") as rules:
             rulesList = csv.reader(rules)
 
             for rule in rulesList:
@@ -62,7 +59,7 @@ class Firewall (EventMixin):
                     log.info("Adding rule after " + newRule.delay + "s!")
                     # TODO - prist na to, preco pravidlo, ktore ma byt aktivovane po casovej odozve sa oneskori o dalsich 20 sekund. Mozno vytvorit vlastnu triedu 'Thread' s danou operaciou namiesto 'Timer' objektu? V kazdom pripade, odstranovanie pravidla cez "hard_timeout" v pushRuleToSwitch funguje spravne a presne.
                     # Sice je nastaveny 'delay' na urcity pocet sekund, ale
-                    # POX si to uvedomi az o dalsich cca 30 sekund neskor
+                    # POX si to uvedomi az o dalsich cca 20 sekund neskor
                     Timer(
                         int(newRule.delay), 
                         self.addFirewallRule, 
@@ -86,13 +83,9 @@ class Firewall (EventMixin):
         return id.hexdigest()
 
     def addFirewallRule (self, rule, ruleID):
-        # TODO - porovnavanie dat do samostatnej metody - porovnavat checksumy, kluce vo 'firewall' Dictionary, pre jednotlive pravidla - porovnavanie by potom vyzeralo takto: if ruleID in self.firewall: ...
-        # TODO - OTESTOVAT
         if ruleID in self.firewall:
                 message = "Rule exists: drop:"
         else:
-            # TODO - upravit pridavanie pravidla - odstranit 'value' parameter -> potom do struktury 'firewall' pridavat pravidla sposobom: self.firewall[ruleID] = rule
-            # TODO - OTESTOVAT
             self.firewall[ruleID] = rule
             self.pushRuleToSwitch(
                 rule.src, 
@@ -102,8 +95,7 @@ class Firewall (EventMixin):
                 rule.expiration
             )
             message = "Rule added: drop:"
-        message += " id:" + ruleID
-        message += " " + str(rule)
+        message += " id:" + ruleID + " " + str(rule)
         log.info(message)
         self.showFirewallRules()
 
@@ -246,13 +238,10 @@ class Firewall (EventMixin):
             self.connection.send(msg)
             log.info("Rule have been added to the switch - backward: H2 -> H1")
 
-    # TODO - OTESTOVAT
     def showFirewallRules (self):
         message = "    *** LIST OF FIREWALL RULES ***\n\n"
-        log.info(message)
         for ruleID,rule in self.firewall.items():
             message += "id: " + ruleID + " " + str(rule) + "\n"
-        ''' print self.firewall '''
         log.info(message)
 
 def launch ():
