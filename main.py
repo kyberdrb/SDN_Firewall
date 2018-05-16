@@ -248,8 +248,9 @@ class Firewall (EventMixin):
 
     def showFirewallRules (self):
         message = "    *** LIST OF FIREWALL RULES ***\n\n"
-        for rule in self.firewall:
-            message += "id: " + rule + " " + rule.ruleInfo() + "\n"
+        ''' for rule in self.firewall:
+            message += "id: " + rule + " " + str(rule) + "\n" '''
+        print self.firewall
         log.info(message)
 
 def launch ():
