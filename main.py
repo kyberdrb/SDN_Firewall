@@ -186,11 +186,14 @@ class Firewall (EventMixin):
 
 ###################################################################
 
-        # Decide, whether the rule should be kept or removed
-        if int(rule.expiration) == 0:
+        # TODO - the logic, whether the rule should be kept or removed, should be in another method - this method should only add/remove rules to/from switch
+        # TODO - interfering with persistent rules
+        ''' if int(rule.expiration) == 0:
             action = "del"
         else:
-            action = "add"
+            action = "add" '''
+
+        action = "add"
 
 ###################################################################
 
