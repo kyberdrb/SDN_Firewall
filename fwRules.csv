@@ -1,2 +1,2 @@
 id,host1,host2,ip_proto,app_proto,expiration,delay
-,10.0.0.1,10.0.0.3,tcp,http,10000,0
+,10.0.0.1,10.0.0.2,icmp,any,0,15
