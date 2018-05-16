@@ -24,8 +24,8 @@ class Firewall (EventMixin):
         log.info(
             "Switch [ID:" + \
             dpidToStr(event.dpid) + \
-            "] has been successfully connected" + \
-            "to the controller"
+            "] has been successfully " + \
+            " connected to the controller"
         )
         rules = self.rulesFilePath("fwRules.csv")
         self.addRulesFromFile(rules)
