@@ -103,7 +103,7 @@ class Firewall (EventMixin):
             )
             message = "Rule added: drop:"
         message += " id:" + ruleID
-        message += str(rule)
+        message += " " + str(rule)
         log.info(message)
         self.showFirewallRules()
 
