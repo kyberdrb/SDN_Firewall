@@ -245,6 +245,3 @@ class Firewall (EventMixin):
 
 def launch ():
     core.registerNew(Firewall)
-
-
-        
