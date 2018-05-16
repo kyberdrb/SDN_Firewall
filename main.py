@@ -239,7 +239,8 @@ class Firewall (EventMixin):
             log.info("Rule have been added to the switch - backward: H2 -> H1")
 
     def showFirewallRules (self):
-        message = "    *** LIST OF FIREWALL RULES ***\n\n"
+        message = "\n                         " + \
+            + "*** LIST OF FIREWALL RULES ***\n\n"
         for ruleID,rule in self.firewall.items():
             message += "id: " + ruleID + " " + str(rule) + "\n"
         log.info(message)
