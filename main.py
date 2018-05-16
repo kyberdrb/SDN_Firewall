@@ -102,7 +102,7 @@ class Firewall (EventMixin):
                 rule.expiration
             )
             message = "Rule added: drop:"
-        message += ruleID
+        message += " id:" + ruleID
         message += str(rule)
         log.info(message)
         self.showFirewallRules()
@@ -250,9 +250,9 @@ class Firewall (EventMixin):
     def showFirewallRules (self):
         message = "    *** LIST OF FIREWALL RULES ***\n\n"
         log.info(message)
-        ''' for rule in self.firewall:
-            message += "id: " + rule + " " + str(rule) + "\n" '''
-        print self.firewall
+        for ruleID,rule in self.firewall.items():
+            message += "id: " + ruleID + " " + str(rule) + "\n"
+        ''' print self.firewall '''
 
 def launch ():
     core.registerNew(Firewall)
