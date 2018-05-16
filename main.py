@@ -84,16 +84,10 @@ class Firewall (EventMixin):
 
     def addFirewallRule (self, rule, ruleID):
         if ruleID in self.firewall:
-                message = "Rule exists: drop:"
+                message = "RULE EXISTS!: drop:"
         else:
             self.firewall[ruleID] = rule
             self.pushRuleToSwitch(rule)
-            '''     rule.src, 
-                rule.dst, 
-                rule.ip_proto, 
-                rule.app_proto, 
-                rule.expiration
-            ) '''
             message = "Rule added: drop:"
         message += " id:" + ruleID + " " + str(rule)
         log.info(message)
@@ -128,7 +122,7 @@ class Firewall (EventMixin):
                 )
                 message = "Rule Deleted: drop:"
         else:
-            message = "Rule doesn't exist: drop:"
+            message = "RULE DOESN'T EXIST!: drop:"
         ''' message += self.ruleInfo(
             src, 
             dst, 
@@ -140,13 +134,6 @@ class Firewall (EventMixin):
         log.info(message)
         self.showFirewallRules()
 
-    ''' def pushRuleToSwitch (
-            self, 
-            src, 
-            dst, 
-            ip_proto, 
-            app_proto, 
-            expiration): '''
     def pushRuleToSwitch (self, rule):
         # creating a switch flow table entry
         msg = of.ofp_flow_mod()
@@ -157,9 +144,8 @@ class Firewall (EventMixin):
             )
         )
 
-        # TODO - if 'expiration' is equal to 0 the rule will persist
+        # TODO - Move rule expiration (in seconds) setting to separate method
         # TODO - after rule expiration, remove it from the 'firewall' datastructure
-        # Setting the expiration of the rule (in seconds)
         msg.hard_timeout = int(rule.expiration)
 
 ###################################################################
@@ -181,6 +167,8 @@ class Firewall (EventMixin):
             match.nw_proto = pkt.ipv4.ICMP_PROTOCOL
         elif rule.ip_proto == "igmp":
             match.nw_proto = pkt.ipv4.IGMP_PROTOCOL
+        else:
+            match.nw_proto = None
 
 ###################################################################
 
@@ -193,6 +181,8 @@ class Firewall (EventMixin):
             match.tp_dst = 23
         elif rule.app_proto == "smtp":
             match.tp_dst = 25
+        else:
+            match.tp_dst = None
 
 ###################################################################
 
