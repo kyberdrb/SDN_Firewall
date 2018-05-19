@@ -152,7 +152,7 @@ class Firewall (EventMixin):
         self.showFirewallRules()
 
     def pushRuleToSwitch (self, rule):
-        # TODO - for 'msg' object create new class, that will use function chaining
+        # TODO - for 'msg' object create new class, that will use function chaining
         # TODO - Move the creating of a switch flow table entry to a separate method
         msg = of.ofp_flow_mod()
 
