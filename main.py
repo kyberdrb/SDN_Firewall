@@ -59,12 +59,21 @@ class Firewall (EventMixin):
                     # TODO - prist na to, preco pravidlo, ktore ma byt aktivovane po casovej odozve sa oneskori o dalsich 20 sekund. Mozno vytvorit vlastnu triedu 'Thread' s danou operaciou namiesto 'Timer' objektu? V kazdom pripade, odstranovanie pravidla cez "hard_timeout" v pushRuleToSwitch funguje spravne a presne.
                     # Sice je nastaveny 'delay' na urcity pocet sekund, ale
                     # POX si to uvedomi az o dalsich cca 20 sekund neskor
+                    self.activateRuleAfterDelay(newRule, ruleID)
                     Timer(
                         int(newRule.delay), 
                         self.addFirewallRule, 
                         [newRule, ruleID]
                     ).start()
+
+                    self.removeRuleAfterExpiration(newRule, ruleID)
+                    ''' Timer(
+                        int(newRule.delay + newRule.expiration), 
+                        self.delFirewallRule, 
+                        [newRule, ruleID]
+                    ).start() '''
                 else:
+                    newRule = self.adjustDelayValue(newRule)
                     if int(newRule.delay) > 65535:
                         newRule.delay = 65535
                     else:
@@ -80,6 +89,15 @@ class Firewall (EventMixin):
         id.update(rule.ip_proto)
         id.update(rule.app_proto)
         return id.hexdigest()
+
+    def activateRuleAfterDelay(self, newRule, ruleID):
+        pass
+
+    def removeRuleAfterExpiration(self, newRule, ruleID):
+        pass
+
+    def adjustDelayValue(self, newRule):
+        return newRule
 
     def addFirewallRule (self, rule, ruleID):
         if ruleID in self.firewall:
