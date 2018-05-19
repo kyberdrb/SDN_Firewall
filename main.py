@@ -124,55 +124,56 @@ class Firewall(EventMixin):
         self.showFirewallRules()
 
     def pushRuleToSwitch(self, rule, action):
-        matchStruct = self.createOFMatchStruct(
-            rule, rule.src, rule.dst)
-        match = matchStruct.OFMatch
-
-        message = self.createOFRule(match, action)
-        msg = message.OFMessage
-
+        match = None
+        match = self.createOFMatch(
+            match, rule, rule.src, rule.dst)
+        msg = None
+        msg = self.createOFMsg(msg, match, action)
         self.connection.send(msg)
 
-        match = matchStruct\
-            .source(rule.dst)\
-            .destination(rule.src)\
-            .OFMatch
-
-        msg = message\
-            .match(match)\
-            .OFMessage
-
+        match = self.createMatchStruct(
+            match, rule, rule.dst, rule.src)
+        msg = self.createOFRule(msg, match, action)
         self.connection.send(msg)
-        
-        log.info(message.testAttr)
-        log.info(matchStruct.testAttr)
 
-    def createOFMatchStruct(
+    def createOFMatch(
             self, 
+            match, 
             rule, 
             src, 
             dst, 
             packetType = "IPv4"):
-        return of_match.OFMtch()\
-            .createMatchStruct()\
-            .packetType(packetType)\
-            .transProto(rule.trans_proto)\
-            .appProtoDst(rule.app_proto)\
-            .source(src)\
-            .destination(dst)
+        if match == None:
+            match = of_match.OFMtch().createMatchStruct()
+        
+        match\
+        .packetType(packetType)\
+        .transProto(rule.trans_proto)\
+        .appProtoDst(rule.app_proto)\
+        .source(src)\
+        .destination(dst)
 
-    def createOFRule(
+        log.info(match.testAttr)
+        return match.OFMatch
+
+    def createOFMsg(
             self, 
+            msg, 
             match, 
             action, 
             priority = 20,
             jump = "DROP"):
-        return of_message.OFMsg()\
-            .createFlowTableEntry()\
+        if msg == None:
+            msg = of_message.OFMsg().createFlowTableEntry()
+
+        msg\
             .priority(priority)\
             .jump(jump)\
             .match(match)\
             .addOrDeleteOFRule(action)
+
+        log.info(msg.testAttr)
+        return msg.OFMessage
 
     def showFirewallRules(self):
         message = "\n                         " + \
