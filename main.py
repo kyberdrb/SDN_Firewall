@@ -122,13 +122,10 @@ class Firewall (EventMixin):
             .createFlowTableEntry()\
             .priority(20)\
             .jump("DROP")
+        ''' .jump("DROP")\
+            .match(match)\
+            .addOrDeleteOFRule(action) '''
         msg = message.OFMessage
-        
-        msg.actions.append(
-            of.ofp_action_output(
-                port=of.OFPP_NONE
-            )
-        )
 
 ###################################################################
 
@@ -138,7 +135,7 @@ class Firewall (EventMixin):
         # TODO - Move setting packet type as IPv4 to a separate method
         match.dl_type = 0x800;
 
-###################################################################
+################################
 
         # TODO - Move the transport protocol matching to a separate class 'TransportProtocol' to a method 'number'
         if rule.ip_proto == "tcp":
@@ -152,7 +149,7 @@ class Firewall (EventMixin):
         else:
             match.nw_proto = None
 
-###################################################################
+#################################
 
         # TODO - Move the application protocol matching to a separate class 'AppProtocol' to a method 'number'
         if rule.app_proto == "ftp":
@@ -166,14 +163,18 @@ class Firewall (EventMixin):
         else:
             match.tp_dst = None
 
-###################################################################
+#################################
 
         # TODO - Move the setting of the flow rule for src:host1 dst:host2 in the match structure to a separate method 'def matchIPAddr(self, host1, host2)'
         if rule.src != "any":
             match.nw_src = IPAddr(rule.src)
         if rule.dst != "any":
             match.nw_dst = IPAddr(rule.dst)
+        
+###################################################################
+
         msg.match = match
+
 
         # TODO - Move the rule addition/removal to/from the switch to a separate method. Again, this logic, whether to add/remove rule to/from a switch should be two separate methods
         if action == "del":
@@ -185,14 +186,18 @@ class Firewall (EventMixin):
             self.connection.send(msg)
             log.info("Rule have been added to the switch - forward: H1 -> H2")
 
-###################
+###################################################################
 
         # TODO - Move the setting of the flow rule for src:host2 dst:host1 in the match structure to a separate method 'def matchIPAddr(self, host1, host2)' - same method as with the flow rule for src:host1 dst:host2
         if rule.dst != "any":
             match.nw_src = IPAddr(rule.dst)
         if rule.src != "any":
             match.nw_dst = IPAddr(rule.src)
+
+###################################################################
+
         msg.match = match
+
 
         # TODO - Move the rule addition/removal to/from the switch to a separate method. Again, this logic, whether to add/remove rule to/from a switch should be two separate methods
         if action == "del":

@@ -11,15 +11,35 @@ class OFMsg:
         self.testAttr += " + createFlowTableEntry"
         return self
         
-    # 'priority' with 'actions' can be uset to turn the current 'permissive' fw mode, to 'restrictive' mode
+    # 'priority' with 'actions' can be uset to turn the current 'permissive' fw mode, to 'restrictive' mode: Allowing rules will have higher priority, blocking rules lower, so that allowing rules will be in front of the blocking rules
     def priority(self, priority):
         self.OFMessage.priority = priority
         self.testAttr += " + priority"
         return self
 
     # The 'of.OFPP_NONE' in 'ofp_action_output' means, that the traffic, that matches with the rule, will be dropped
-    # Possible actions: "DROP" and "ACCEPT"
     def jump(self, action):
-        self.testAttr += " + action"
+        if action == "DROP":
+            self.OFMessage.actions.append(
+                of.ofp_action_output(
+                    port=of.OFPP_NONE
+                )
+            )
+        elif action == "ACCEPT":
+            pass
+        self.testAttr += " + jump - action: " + action
         return self
 
+    def match(self, match_struct):
+        self.OFMessage.match = match_struct
+        return self
+
+    def addOrDeleteOFRule(self, action):
+        self.testAttr += " + addOrDelete - action: " + action
+        if action == "del":
+            self.OFMessage.command=of.OFPFC_DELETE
+            self.OFMessage.flags = of.OFPFF_SEND_FLOW_REM
+            ''' log.info("Rule have been removed from the switch - forward: H1 -> H2") '''
+        elif action == "add":
+            ''' log.info("Rule have been added to the switch - forward: H1 -> H2") '''
+        return self
