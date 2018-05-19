@@ -75,7 +75,7 @@ class Firewall(EventMixin):
         id = checksum.md5()
         id.update(rule.src)
         id.update(rule.dst)
-        id.update(rule.ip_proto)
+        id.update(rule.trans_proto)
         id.update(rule.app_proto)
         return id.hexdigest()
 
@@ -156,7 +156,7 @@ class Firewall(EventMixin):
         return of_match.OFMtch()\
             .createMatchStruct()\
             .packetType(packetType)\
-            .transProto(rule.ip_proto)\
+            .transProto(rule.trans_proto)\
             .appProtoDst(rule.app_proto)\
             .source(src)\
             .destination(dst)
