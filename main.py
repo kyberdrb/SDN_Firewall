@@ -5,14 +5,19 @@ import pox.openflow.libopenflow_01 as of
 
 from pox.lib.revent import *
 from pox.lib.util import dpidToStr
+
+# TODO - delete the import below after successful migration to "of_match"
 import pox.lib.packet as pkt
+
 from pox.lib.addresses import EthAddr, IPAddr
 import os
 import csv
+
 from threading import Timer
 from rule import Rule
 import hashlib as checksum
 import of_message
+import of_match
 
 log = core.getLogger()
 
@@ -120,11 +125,17 @@ class Firewall(EventMixin):
         self.showFirewallRules()
 
     def pushRuleToSwitch(self, rule, action):
-        # TODO - Move the creating of a match structure to a separate method
+        ''' # TODO - Move the creating of a match structure to a separate method
         match = of.ofp_match()
 
         # TODO - Move setting packet type as IPv4 to a separate method
-        match.dl_type = 0x800;
+        match.dl_type = 0x800; '''
+
+        matchStruct = of_match.OFMtch()\
+            .createMatchStruct()\
+            .packetType("IPv4")
+
+        match = matchStruct.OFMatch
 
 ################################
 
@@ -187,7 +198,9 @@ class Firewall(EventMixin):
         msg = message\
             .match(match)\
             .OFMessage
+
         self.connection.send(msg)
+        
         print message.testAttr
 
     def showFirewallRules(self):

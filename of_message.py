@@ -37,7 +37,7 @@ class OFMsg:
         return self
 
     def addOrDeleteOFRule(self, action):
-        self.testAttr += " + addOrDelete - action: " + action
+        self.testAttr += " + addOrDelete (action: " + action + ")"
         if action == "del":
             self.OFMessage.command = of.OFPFC_DELETE
             self.OFMessage.flags = of.OFPFF_SEND_FLOW_REM
