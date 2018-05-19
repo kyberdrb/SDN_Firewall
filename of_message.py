@@ -21,9 +21,10 @@ class OFMsg:
     def jump(self, action):
         if action == "DROP":
             act = of.ofp_action_output(port=of.OFPP_NONE)
-            self.OFMessage.actions.append(act)
         elif action == "ACCEPT":
-            pass
+            act = of.ofp_action_output(port=of.OFPP_FLOOD)
+        
+        self.OFMessage.actions.append(act)
         self.testAttr += " + jump (action: " + action + ")"
         return self
 
