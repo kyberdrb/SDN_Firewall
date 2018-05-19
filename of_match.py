@@ -1,5 +1,6 @@
 from pox.core import core
 import pox.openflow.libopenflow_01 as of
+from pox.lib.addresses import EthAddr, IPAddr
 from transproto import TransProto
 from appproto import AppProto
 
@@ -28,7 +29,14 @@ class OFMtch:
         self.testAttr += " + transProto (" + protocol + ")"
         return self
 
-    def appProto(self, protocol):
+    def appProtoDst(self, protocol):
         self.OFMatch.tp_dst = AppProto().number(protocol)
-        self.testAttr += " + appProto (" + protocol + ")"
+        self.testAttr += " + appProtoDst (" + protocol + ")"
+        return self
+
+    def fromTo(self, src, dst):
+        if src != "any":
+            self.OFMatch.nw_src = IPAddr(src)
+        if dst != "any":
+            self.OFMatch.nw_dst = IPAddr(dst)
         return self

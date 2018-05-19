@@ -12,10 +12,9 @@ import pox.lib.packet as pkt
 from pox.lib.addresses import EthAddr, IPAddr
 import os
 import csv
-
 from threading import Timer
-from rule import Rule
 import hashlib as checksum
+from rule import Rule
 import of_message
 import of_match
 
@@ -128,24 +127,10 @@ class Firewall(EventMixin):
         matchStruct = of_match.OFMtch()\
             .createMatchStruct()\
             .packetType("IPv4")\
-            .transProto(rule.ip_proto)
+            .transProto(rule.ip_proto)\
+            .appProtoDst(rule.app_proto)
 
-        match = matchStruct.OFMatch
-
-        ''' if rule.ip_proto == "tcp":
-            match.nw_proto = pkt.ipv4.TCP_PROTOCOL
-        if rule.ip_proto == "udp":
-            match.nw_proto = pkt.ipv4.UDP_PROTOCOL
-        elif rule.ip_proto == "icmp":
-            match.nw_proto = pkt.ipv4.ICMP_PROTOCOL
-        elif rule.ip_proto == "igmp":
-            match.nw_proto = pkt.ipv4.IGMP_PROTOCOL
-        else:
-            match.nw_proto = None '''
-
-#################################
-
-        # TODO - Move the application protocol matching to a separate class 'AppProtocol' to a method 'number'
+        ''' # TODO - Move the application protocol matching to a separate class 'AppProtocol' to a method 'number'
         if rule.app_proto == "ftp":
             match.tp_dst = 21
         elif rule.app_proto == "http":
@@ -155,7 +140,9 @@ class Firewall(EventMixin):
         elif rule.app_proto == "smtp":
             match.tp_dst = 25
         else:
-            match.tp_dst = None
+            match.tp_dst = None '''
+
+        match = matchStruct.OFMatch
 
 #################################
 
