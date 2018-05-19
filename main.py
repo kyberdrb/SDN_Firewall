@@ -80,7 +80,6 @@ class Firewall (EventMixin):
 
     def removeRuleAfterExpiration(self, newRule, ruleID):
         delayPlusExpiration = int(newRule.delay) + int(newRule.expiration)
-        print delayPlusExpiration
         Timer(
             delayPlusExpiration, 
             self.delFirewallRule, 
@@ -213,8 +212,11 @@ class Firewall (EventMixin):
     def showFirewallRules (self):
         message = "\n                         " + \
             "*** LIST OF FIREWALL RULES ***\n\n"
-        for ruleID,rule in self.firewall.items():
-            message += "id: " + ruleID + " " + str(rule) + "\n"
+        if len(self.firewall) > 0:
+            for ruleID,rule in self.firewall.items():
+                message += "id: " + ruleID + " " + str(rule) + "\n"
+        else:
+            message += "The list of rules is empty.\n"
         log.info(message)
 
 def launch ():
