@@ -1,5 +1,6 @@
 from pox.core import core
-#import pox.openflow.libopenflow_01 as of
+# TODO - delete this import after successful migration to "of_message" and "of_match"
+import pox.openflow.libopenflow_01 as of
 from pox.lib.revent import *
 from pox.lib.util import dpidToStr
 import pox.lib.packet as pkt
@@ -117,36 +118,24 @@ class Firewall (EventMixin):
         self.showFirewallRules()
 
     def pushRuleToSwitch (self, rule, action):
-        # TODO - for 'msg' object create new class, that will use function chaining
-        # TODO - Move the creating of a switch flow table entry to a separate method
-        '''msg = of.ofp_flow_mod()
-
-        msg.priority = 20
-
+        message = of_message.OFMsg()\
+            .createFlowTableEntry()\
+            .priority(20)\
+            .jump("DROP")
+        msg = message.OFMessage
+        
         msg.actions.append(
             of.ofp_action_output(
                 port=of.OFPP_NONE
             )
-        ) '''
-
-        # TODO - Move to separate method with more meaningful name
-        # TODO - Remove the rule from the 'firewall' datastructure after its expiration - maybe create another Timer at the time, when the rule is added to the 'firewall' datastructure, that will call the 'delFirewallRule' method
-        #msg.hard_timeout = int(rule.expiration)
-
-        message = of_message.OFMsg()\
-            .createFlowTableEntry()\
-            .priority(20)\
-            .action("DROP")
-
-        print message.testAttr
-        msg = message.OFMessage
+        )
 
 ###################################################################
 
-        ''' # TODO - Move the creating of a match structure to a separate method
+        # TODO - Move the creating of a match structure to a separate method
         match = of.ofp_match()
 
-        # TODO - Move setting packet ethernet type as IPv4 to a separate method
+        # TODO - Move setting packet type as IPv4 to a separate method
         match.dl_type = 0x800;
 
 ###################################################################
@@ -213,7 +202,9 @@ class Firewall (EventMixin):
             log.info("Rule have been removed from the switch - backward: H2 -> H1")
         elif action == "add":
             self.connection.send(msg)
-            log.info("Rule have been added to the switch - backward: H2 -> H1") '''
+            log.info("Rule have been added to the switch - backward: H2 -> H1")
+
+        print message.testAttr
 
     def showFirewallRules (self):
         message = "\n                         " + \

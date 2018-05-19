@@ -19,7 +19,7 @@ class OFMsg:
 
     # The 'of.OFPP_NONE' in 'ofp_action_output' means, that the traffic, that matches with the rule, will be dropped
     # Possible actions: "DROP" and "ACCEPT"
-    def action(self, action):
+    def jump(self, action):
         self.testAttr += " + action"
         return self
 
