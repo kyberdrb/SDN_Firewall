@@ -1,6 +1,8 @@
 from pox.core import core
-# TODO - delete this import after successful migration to "of_message" and "of_match"
+
+# TODO - delete the import below after successful migration to "of_message" and "of_match"
 import pox.openflow.libopenflow_01 as of
+
 from pox.lib.revent import *
 from pox.lib.util import dpidToStr
 import pox.lib.packet as pkt
@@ -14,14 +16,14 @@ import of_message
 
 log = core.getLogger()
 
-class Firewall (EventMixin):
+class Firewall(EventMixin):
 
-    def __init__ (self):
+    def __init__(self):
         self.listenTo(core.openflow)
         self.firewall = {}
         log.info("*** Starting SDN Firewall ***")
 
-    def _handle_ConnectionUp (self, event):
+    def _handle_ConnectionUp(self, event):
         self.connection = event.connection
         log.info(
             "Switch [ID:" + \
@@ -32,7 +34,7 @@ class Firewall (EventMixin):
         rules = self.rulesFilePath("fwRules.csv")
         self.addRulesFromFile(rules)
 
-    def rulesFilePath (self, rulesFileName):
+    def rulesFilePath(self, rulesFileName):
         currentDir = os.path.dirname(__file__)
         fwPkgPath = os.path.abspath(currentDir)
         fwRulesPath = os.path.join(fwPkgPath, rulesFileName)
@@ -95,7 +97,7 @@ class Firewall (EventMixin):
             newRule.delay = 0
         return newRule
 
-    def addFirewallRule (self, rule, ruleID):
+    def addFirewallRule(self, rule, ruleID):
         if ruleID in self.firewall:
                 message = "RULE EXISTS!: drop:"
         else:
@@ -106,7 +108,7 @@ class Firewall (EventMixin):
         log.info(message)
         self.showFirewallRules()
 
-    def delFirewallRule (self, rule, ruleID):
+    def delFirewallRule(self, rule, ruleID):
         if ruleID in self.firewall:
             del self.firewall[ruleID]
             self.pushRuleToSwitch(rule, action="del")
@@ -117,7 +119,7 @@ class Firewall (EventMixin):
         log.info(message)
         self.showFirewallRules()
 
-    def pushRuleToSwitch (self, rule, action):
+    def pushRuleToSwitch(self, rule, action):
         # TODO - Move the creating of a match structure to a separate method
         match = of.ofp_match()
 
@@ -166,20 +168,11 @@ class Firewall (EventMixin):
             .createFlowTableEntry()\
             .priority(20)\
             .jump("DROP")\
-            .match(match)
-        ''' .addOrDeleteOFRule(action) '''
+            .match(match)\
+            .addOrDeleteOFRule(action)
         msg = message.OFMessage
 
-
-        # TODO - Move the rule addition/removal to/from the switch to a separate method. Again, this logic, whether to add/remove rule to/from a switch should be two separate methods
-        if action == "del":
-            msg.command=of.OFPFC_DELETE
-            msg.flags = of.OFPFF_SEND_FLOW_REM
-            self.connection.send(msg)
-            log.info("Rule have been removed from the switch - forward: H1 -> H2")
-        elif action == "add":
-            self.connection.send(msg)
-            log.info("Rule have been added to the switch - forward: H1 -> H2")
+        self.connection.send(msg)
 
 ###################################################################
 
@@ -191,22 +184,13 @@ class Firewall (EventMixin):
 
 ###################################################################
 
-        msg.match = match
-
-
-        # TODO - Move the rule addition/removal to/from the switch to a separate method. Again, this logic, whether to add/remove rule to/from a switch should be two separate methods
-        if action == "del":
-            msg.command=of.OFPFC_DELETE
-            msg.flags = of.OFPFF_SEND_FLOW_REM
-            self.connection.send(msg)
-            log.info("Rule have been removed from the switch - backward: H2 -> H1")
-        elif action == "add":
-            self.connection.send(msg)
-            log.info("Rule have been added to the switch - backward: H2 -> H1")
-
+        msg = message\
+            .match(match)\
+            .OFMessage
+        self.connection.send(msg)
         print message.testAttr
 
-    def showFirewallRules (self):
+    def showFirewallRules(self):
         message = "\n                         " + \
             "*** LIST OF FIREWALL RULES ***\n\n"
         if len(self.firewall) > 0:
@@ -216,5 +200,5 @@ class Firewall (EventMixin):
             message += "The list of rules is empty.\n"
         log.info(message)
 
-def launch ():
+def launch():
     core.registerNew(Firewall)

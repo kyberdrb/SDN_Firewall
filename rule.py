@@ -1,6 +1,6 @@
 class Rule:
 
-    def __init__ (
+    def __init__(
             self,
             src, 
             dst, 
@@ -15,7 +15,7 @@ class Rule:
         self.expiration = expiration
         self.delay = delay
 
-    def __str__ (self):
+    def __str__(self):
         return  "src:" + self.src + \
                 " dst:" + self.dst + \
                 " ip_proto:" + self.ip_proto + \
