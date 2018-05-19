@@ -49,7 +49,7 @@ class Firewall(EventMixin):
             rulesList = csv.reader(rules)
 
             for rule in rulesList:
-                if rule[0] != None:
+                if '#' in rule[0]:
                     continue
 
                 newRule = Rule(
