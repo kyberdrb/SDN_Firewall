@@ -125,22 +125,12 @@ class Firewall(EventMixin):
         self.showFirewallRules()
 
     def pushRuleToSwitch(self, rule, action):
-        ''' # TODO - Move the creating of a match structure to a separate method
-        match = of.ofp_match()
-
-        # TODO - Move setting packet type as IPv4 to a separate method
-        match.dl_type = 0x800; '''
-
         matchStruct = of_match.OFMtch()\
             .createMatchStruct()\
-            .packetType("IPv4")
+            .packetType("IPv4")\
+            .transProto(rule.ip_proto)
 
-        match = matchStruct.OFMatch
-
-################################
-
-        # TODO - Move the transport protocol matching to a separate class 'TransportProtocol' to a method 'number'
-        if rule.ip_proto == "tcp":
+        ''' if rule.ip_proto == "tcp":
             match.nw_proto = pkt.ipv4.TCP_PROTOCOL
         if rule.ip_proto == "udp":
             match.nw_proto = pkt.ipv4.UDP_PROTOCOL
@@ -149,7 +139,7 @@ class Firewall(EventMixin):
         elif rule.ip_proto == "igmp":
             match.nw_proto = pkt.ipv4.IGMP_PROTOCOL
         else:
-            match.nw_proto = None
+            match.nw_proto = None '''
 
 #################################
 
@@ -202,6 +192,7 @@ class Firewall(EventMixin):
         self.connection.send(msg)
         
         print message.testAttr
+        print matchStruct.testAttr
 
     def showFirewallRules(self):
         message = "\n                         " + \
