@@ -37,9 +37,11 @@ class OFMtch:
     def source(self, addr):
         if addr != "any":
             self.OFMatch.nw_src = IPAddr(addr)
+        self.testAttr += " + source (" + addr + ")"
         return self
 
     def destination(self, addr):
         if addr != "any":
             self.OFMatch.nw_dst = IPAddr(addr)
+            self.testAttr += " + destination (" + addr + ")"
         return self

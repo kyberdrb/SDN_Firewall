@@ -134,13 +134,6 @@ class Firewall(EventMixin):
 
         match = matchStruct.OFMatch
 
-        ''' if rule.src != "any":
-            match.nw_src = IPAddr(rule.src)
-        if rule.dst != "any":
-            match.nw_dst = IPAddr(rule.dst) '''
-        
-###################################################################
-
         message = of_message.OFMsg()\
             .createFlowTableEntry()\
             .priority(20)\
@@ -151,15 +144,16 @@ class Firewall(EventMixin):
 
         self.connection.send(msg)
 
-###################################################################
-
-        # TODO - Move the setting of the flow rule for src:host2 dst:host1 in the match structure to a separate method 'def matchIPAddr(self, host1, host2)' - same method as with the flow rule for src:host1 dst:host2
+        ''' # TODO - Move the setting of the flow rule for src:host2 dst:host1 in the match structure to a separate method 'def matchIPAddr(self, host1, host2)' - same method as with the flow rule for src:host1 dst:host2
         if rule.dst != "any":
             match.nw_src = IPAddr(rule.dst)
         if rule.src != "any":
-            match.nw_dst = IPAddr(rule.src)
+            match.nw_dst = IPAddr(rule.src) '''
 
-###################################################################
+        match = matchStruct\
+            .source(rule.dst)\
+            .destination(rule.src)\
+            .OFMatch
 
         msg = message\
             .match(match)\
