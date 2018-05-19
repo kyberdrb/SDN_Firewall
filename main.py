@@ -148,14 +148,14 @@ class Firewall(EventMixin):
         log.info(matchStruct.testAttr)
 
     def createOFMatchStruct(
-            self, 
             packetType = "IPv4", 
+            self, 
             rule, 
             src, 
             dst):
         return of_match.OFMtch()\
             .createMatchStruct()\
-            .packetType("IPv4")\
+            .packetType(packetType)\
             .transProto(rule.ip_proto)\
             .appProtoDst(rule.app_proto)\
             .source(src)\
