@@ -134,10 +134,11 @@ class Firewall (EventMixin):
         self.showFirewallRules()
 
     def pushRuleToSwitch (self, rule):
+        # TODO - for 'msg' object create new class, that will use function chaining
         # TODO - Move the creating of a switch flow table entry to a separate method
         msg = of.ofp_flow_mod()
 
-        # TODO - Move the setting of rule priority to a separate method
+        # TODO - Move the setting of rule priority to a separate method - 'priority' with 'actions' can be uset to turn the current 'permissive' fw mode, to 'restrictive' mode
         msg.priority = 20
 
         # TODO - Move the setting of rule action to a separate method. The 'of.OFPP_NONE' in 'ofp_action_output' means, that the traffic, that matches with the rule, will be dropped
@@ -147,6 +148,7 @@ class Firewall (EventMixin):
             )
         )
 
+        # TODO - Move to separate method with more meaningful name
         # TODO - Remove the rule from the 'firewall' datastructure after its expiration - maybe create another Timer at the time, when the rule is added to the 'firewall' datastructure, that will call the 'delFirewallRule' method
         msg.hard_timeout = int(rule.expiration)
 
