@@ -131,7 +131,7 @@ class Firewall(EventMixin):
         msg = self.createOFMsg(msg, match, action)
         self.connection.send(msg)
 
-        match = self.createMatchStruct(
+        match = self.createOFMatch(
             match, rule, rule.dst, rule.src)
         msg = self.createOFRule(msg, match, action)
         self.connection.send(msg)
