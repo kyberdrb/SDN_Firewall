@@ -142,12 +142,12 @@ class Firewall(EventMixin):
             rule, 
             src, 
             dst, 
-            packetType = "IPv4"):
+            pktType = "IPv4"):
         if match == None:
             match = of_match.OFMtch().createMatchStruct()
         
         match\
-        .packetType(packetType)\
+        .packetType(pktType)\
         .transProto(rule.trans_proto)\
         .appProtoDst(rule.app_proto)\
         .source(src)\
