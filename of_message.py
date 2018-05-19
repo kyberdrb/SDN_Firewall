@@ -11,7 +11,7 @@ class OFMsg:
         self.testAttr += " + createFlowTableEntry"
         return self
         
-    # 'priority' with 'actions' can be uset to turn the current 'permissive' fw mode, to 'restrictive' mode
+    # 'priority' with 'actions' can be uset to turn the current 'permissive' fw mode, to 'restrictive' mode
     def priority(self, priority):
         self.OFMessage.priority = priority
         self.testAttr += " + priority"
