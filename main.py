@@ -49,16 +49,16 @@ class Firewall(EventMixin):
             rulesList = csv.reader(rules)
 
             for rule in rulesList:
-                if rule[0] == "id":
+                if rule[0] != None:
                     continue
 
                 newRule = Rule(
-                    src = rule[1], 
-                    dst = rule[2], 
-                    trans_proto = rule[3], 
-                    app_proto = rule[4], 
-                    expiration = rule[5], 
-                    delay = rule[6]
+                    src = rule[0], 
+                    dst = rule[1], 
+                    trans_proto = rule[2], 
+                    app_proto = rule[3], 
+                    expiration = rule[4], 
+                    delay = rule[5]
                 )
                 ruleID = self.generateRuleID(newRule)
 
