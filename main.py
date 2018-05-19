@@ -116,7 +116,7 @@ class Firewall(EventMixin):
         if ruleID in self.firewall:
             del self.firewall[ruleID]
             self.pushRuleToSwitch(rule, action="del")
-            message = "Rule Deleted: drop:"
+            message = "Rule deleted: drop:"
         else:
             message = "RULE DOESN'T EXIST!: drop:"
         message += " id:" + ruleID + " " + str(rule)
@@ -156,7 +156,7 @@ class Firewall(EventMixin):
         #log.info(match.testAttr)
         return match
 
-    def createOFMsg(self, msg, match, action, priority = 20,jump = "DROP"):
+    def createOFMsg(self, msg, match, action, priority = 20, jump = "DROP"):
         if msg == None:
             msg = of_message.OFMsg().createFlowTableEntry()
 
