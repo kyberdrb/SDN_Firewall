@@ -7,7 +7,7 @@ from pox.lib.addresses import EthAddr, IPAddr
 import os
 import csv
 from threading import Timer
-import rule.Rule
+from rule import Rule
 import hashlib as checksum
 import of_message
 
