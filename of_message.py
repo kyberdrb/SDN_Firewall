@@ -28,7 +28,7 @@ class OFMsg:
             act = of.ofp_action_output(port = of.OFPP_FLOOD)
         
         self.OFMessage.actions.append(act)
-        self.testAttr += " + jump (action: " + action + ")"
+        self.testAttr += " + jump (" + action + ")"
         return self
 
     def match(self, match_struct):
@@ -37,7 +37,7 @@ class OFMsg:
         return self
 
     def addOrDeleteOFRule(self, action):
-        self.testAttr += " + addOrDelete (action: " + action + ")"
+        self.testAttr += " + addOrDelete (" + action + ")"
         if action == "del":
             self.OFMessage.command = of.OFPFC_DELETE
             self.OFMessage.flags = of.OFPFF_SEND_FLOW_REM

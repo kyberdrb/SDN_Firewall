@@ -128,29 +128,16 @@ class Firewall(EventMixin):
             .createMatchStruct()\
             .packetType("IPv4")\
             .transProto(rule.ip_proto)\
-            .appProtoDst(rule.app_proto)
-
-        ''' # TODO - Move the application protocol matching to a separate class 'AppProtocol' to a method 'number'
-        if rule.app_proto == "ftp":
-            match.tp_dst = 21
-        elif rule.app_proto == "http":
-            match.tp_dst = 80
-        elif rule.app_proto == "telnet":
-            match.tp_dst = 23
-        elif rule.app_proto == "smtp":
-            match.tp_dst = 25
-        else:
-            match.tp_dst = None '''
-
+            .appProtoDst(rule.app_proto)\
+            .from(rule.src)\
+            .to(rule.dst)
+            
         match = matchStruct.OFMatch
 
-#################################
-
-        # TODO - Move the setting of the flow rule for src:host1 dst:host2 in the match structure to a separate method 'def matchIPAddr(self, host1, host2)'
-        if rule.src != "any":
+        ''' if rule.src != "any":
             match.nw_src = IPAddr(rule.src)
         if rule.dst != "any":
-            match.nw_dst = IPAddr(rule.dst)
+            match.nw_dst = IPAddr(rule.dst) '''
         
 ###################################################################
 
