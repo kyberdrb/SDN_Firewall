@@ -20,14 +20,11 @@ class OFMsg:
     # The 'of.OFPP_NONE' in 'ofp_action_output' means, that the traffic, that matches with the rule, will be dropped
     def jump(self, action):
         if action == "DROP":
-            self.OFMessage.actions.append(
-                of.ofp_action_output(
-                    port=of.OFPP_NONE
-                )
-            )
+            act = of.ofp_action_output(port=of.OFPP_NONE)
+            self.OFMessage.actions.append(act)
         elif action == "ACCEPT":
             pass
-        self.testAttr += " + jump - action: " + action
+        self.testAttr += " + jump (action: " + action + ")"
         return self
 
     def match(self, match_struct):
