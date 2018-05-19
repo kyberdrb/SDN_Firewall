@@ -153,7 +153,7 @@ class Firewall(EventMixin):
         .source(src)\
         .destination(dst)
 
-        log.info(match.testAttr)
+        #log.info(match.testAttr)
         return match
 
     def createOFMsg(self, msg, match, action, priority = 20,jump = "DROP"):
@@ -166,7 +166,7 @@ class Firewall(EventMixin):
             .match(match)\
             .addOrDeleteOFRule(action)
 
-        log.info(msg.testAttr)
+        #log.info(msg.testAttr)
         return msg
 
     def showFirewallRules(self):
