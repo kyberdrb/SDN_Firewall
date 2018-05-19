@@ -130,6 +130,8 @@ class Firewall(EventMixin):
             .packetType("IPv4")\
             .transProto(rule.ip_proto)
 
+        match = matchStruct.OFMatch
+
         ''' if rule.ip_proto == "tcp":
             match.nw_proto = pkt.ipv4.TCP_PROTOCOL
         if rule.ip_proto == "udp":
