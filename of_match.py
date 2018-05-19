@@ -34,12 +34,12 @@ class OFMtch:
         self.testAttr += " + appProtoDst (" + protocol + ")"
         return self
 
-    def from(self, addr):
+    def source(self, addr):
         if addr != "any":
             self.OFMatch.nw_src = IPAddr(addr)
         return self
 
-    def to(self, addr):
+    def destination(self, addr):
         if addr != "any":
             self.OFMatch.nw_dst = IPAddr(addr)
         return self

@@ -129,9 +129,9 @@ class Firewall(EventMixin):
             .packetType("IPv4")\
             .transProto(rule.ip_proto)\
             .appProtoDst(rule.app_proto)\
-            .from(rule.src)\
-            .to(rule.dst)
-            
+            .source(rule.src)\
+            .destination(rule.dst)
+
         match = matchStruct.OFMatch
 
         ''' if rule.src != "any":
