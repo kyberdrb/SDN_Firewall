@@ -86,8 +86,13 @@ class Firewall (EventMixin):
         ).start()
 
     def removeRuleAfterExpiration(self, newRule, ruleID):
+        print int(newRule.delay + newRule.expiration)
+        
+        delayPlusExpiration = int(newRule.delay) + int(newRule.expiration)
+        print delayPlusExpiration
+        
         Timer(
-            int(newRule.delay + newRule.expiration), 
+            delayPlusExpiration, 
             self.delFirewallRule, 
             [newRule, ruleID]
         ).start()
