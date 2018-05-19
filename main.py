@@ -104,7 +104,6 @@ class Firewall (EventMixin):
         log.info(message)
         self.showFirewallRules()
 
-    # TODO - basically, make this method should look similar to the 'addFirewallRule': add 'rule' parameter + edit all parameters like: 'src' to 'rule.src' etc. -> see 'addFirewallRule' method
     def delFirewallRule (self, rule, ruleID):
         if ruleID in self.firewall:
             del self.firewall[ruleID]
