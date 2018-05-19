@@ -41,7 +41,11 @@ class OFMsg:
         if action == "del":
             self.OFMessage.command = of.OFPFC_DELETE
             self.OFMessage.flags = of.OFPFF_SEND_FLOW_REM
-            log.info("Rule have been removed from the switch - forward: H1 -> H2")
+            self.ruleNotif()
         elif action == "add":
-            log.info("Rule have been added to the switch - forward: H1 -> H2")
+            self.ruleNotif()
         return self
+
+    def ruleNotif(self):
+        log.info("Rule have been removed from the switch\
+                 - check the 'source' and 'destination' IP addresses")
