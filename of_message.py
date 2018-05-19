@@ -17,7 +17,7 @@ class OFMsg:
     # 'priority' with 'actions' can be uset to turn the current 'permissive' fw mode, to 'restrictive' mode: Allowing rules will have higher priority, blocking rules lower, so that allowing rules will be in front of the blocking rules
     def priority(self, priority):
         self.OFMessage.priority = priority
-        self.testAttr += " + priority"
+        self.testAttr += " + priority (" + priority + ")"
         return self
 
     # The 'of.OFPP_NONE' in 'ofp_action_output' means, that the traffic, that matches with the rule, will be dropped
@@ -47,5 +47,5 @@ class OFMsg:
         return self
 
     def ruleNotif(self):
-        log.info("Rule have been removed from the switch\
-                 - check the 'source' and 'destination' IP addresses")
+        log.info("Rule have been removed from the switch - " +\
+                 "check the 'source' and 'destination' IP addresses")
