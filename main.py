@@ -52,7 +52,6 @@ class Firewall (EventMixin):
                     expiration = rule[5], 
                     delay = rule[6]
                 )
-
                 ruleID = self.generateRuleID(newRule)
 
                 if int(newRule.delay) > 0:
@@ -60,18 +59,7 @@ class Firewall (EventMixin):
                     # Sice je nastaveny 'delay' na urcity pocet sekund, ale
                     # POX si to uvedomi az o dalsich cca 20 sekund neskor
                     self.activateRuleAfterDelay(newRule, ruleID)
-                    Timer(
-                        int(newRule.delay), 
-                        self.addFirewallRule, 
-                        [newRule, ruleID]
-                    ).start()
-
                     self.removeRuleAfterExpiration(newRule, ruleID)
-                    ''' Timer(
-                        int(newRule.delay + newRule.expiration), 
-                        self.delFirewallRule, 
-                        [newRule, ruleID]
-                    ).start() '''
                 else:
                     newRule = self.adjustDelayValue(newRule)
                     if int(newRule.delay) > 65535:
@@ -91,10 +79,18 @@ class Firewall (EventMixin):
         return id.hexdigest()
 
     def activateRuleAfterDelay(self, newRule, ruleID):
-        pass
+        Timer(
+            int(newRule.delay), 
+            self.addFirewallRule, 
+            [newRule, ruleID]
+        ).start()
 
     def removeRuleAfterExpiration(self, newRule, ruleID):
-        pass
+        ''' Timer(
+            int(newRule.delay + newRule.expiration), 
+            self.delFirewallRule, 
+            [newRule, ruleID]
+        ).start() '''
 
     def adjustDelayValue(self, newRule):
         return newRule
