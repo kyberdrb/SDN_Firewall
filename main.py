@@ -118,17 +118,6 @@ class Firewall (EventMixin):
         self.showFirewallRules()
 
     def pushRuleToSwitch (self, rule, action):
-        message = of_message.OFMsg()\
-            .createFlowTableEntry()\
-            .priority(20)\
-            .jump("DROP")
-        ''' .jump("DROP")\
-            .match(match)\
-            .addOrDeleteOFRule(action) '''
-        msg = message.OFMessage
-
-###################################################################
-
         # TODO - Move the creating of a match structure to a separate method
         match = of.ofp_match()
 
@@ -173,7 +162,13 @@ class Firewall (EventMixin):
         
 ###################################################################
 
-        msg.match = match
+        message = of_message.OFMsg()\
+            .createFlowTableEntry()\
+            .priority(20)\
+            .jump("DROP")\
+            .match(match)
+        ''' .addOrDeleteOFRule(action) '''
+        msg = message.OFMessage
 
 
         # TODO - Move the rule addition/removal to/from the switch to a separate method. Again, this logic, whether to add/remove rule to/from a switch should be two separate methods
