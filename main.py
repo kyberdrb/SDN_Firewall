@@ -124,31 +124,14 @@ class Firewall(EventMixin):
         self.showFirewallRules()
 
     def pushRuleToSwitch(self, rule, action):
-        matchStruct = of_match.OFMtch()\
-            .createMatchStruct()\
-            .packetType("IPv4")\
-            .transProto(rule.ip_proto)\
-            .appProtoDst(rule.app_proto)\
-            .source(rule.src)\
-            .destination(rule.dst)
-
+        matchStruct = self.createOFMatchStruct(
+            rule, rule.src, rule.dst)
         match = matchStruct.OFMatch
 
-        message = of_message.OFMsg()\
-            .createFlowTableEntry()\
-            .priority(20)\
-            .jump("DROP")\
-            .match(match)\
-            .addOrDeleteOFRule(action)
+        message = self.createOFRule(match, action)
         msg = message.OFMessage
 
         self.connection.send(msg)
-
-        ''' # TODO - Move the setting of the flow rule for src:host2 dst:host1 in the match structure to a separate method 'def matchIPAddr(self, host1, host2)' - same method as with the flow rule for src:host1 dst:host2
-        if rule.dst != "any":
-            match.nw_src = IPAddr(rule.dst)
-        if rule.src != "any":
-            match.nw_dst = IPAddr(rule.src) '''
 
         match = matchStruct\
             .source(rule.dst)\
@@ -161,8 +144,30 @@ class Firewall(EventMixin):
 
         self.connection.send(msg)
         
-        print message.testAttr
-        print matchStruct.testAttr
+        log.info(message.testAttr)
+        log.info(matchStruct.testAttr)
+
+    def createOFMatchStruct(
+            self, 
+            packetType = "IPv4", 
+            rule, 
+            src, 
+            dst):
+        return of_match.OFMtch()\
+            .createMatchStruct()\
+            .packetType("IPv4")\
+            .transProto(rule.ip_proto)\
+            .appProtoDst(rule.app_proto)\
+            .source(src)\
+            .destination(dst)
+
+    def createOFRule(self, match, action):
+        return of_message.OFMsg()\
+            .createFlowTableEntry()\
+            .priority(20)\
+            .jump("DROP")\
+            .match(match)\
+            .addOrDeleteOFRule(action)
 
     def showFirewallRules(self):
         message = "\n                         " + \
