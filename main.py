@@ -125,24 +125,34 @@ class Firewall(EventMixin):
 
     def pushRuleToSwitch(self, rule, action):
         match = None
+        message = None
+
+        ''' match = self.createOFMatch(
+            match, rule, rule.src, rule.dst)
+        message = self.createOFMsg(message, match.OFMatch, action)
+        self.connection.send(message.OFMessage)
+
         match = self.createOFMatch(
             match, rule, rule.src, rule.dst)
-        msg = None
-        msg = self.createOFMsg(msg, match, action)
-        self.connection.send(msg)
+        message = self.createOFMsg(message, match.OFMatch, action)
+        self.connection.send(message.OFMessage) '''
 
+        self.createAndSendOFRule(
+            match, rule, 
+            rule.src, rule.dst, 
+            message, action)
+        self.createAndSendOFRule(
+            match, rule, 
+            rule.dst, rule.src, 
+            message, action)
+
+    def createAndSendOFRule(self, match, rule, src, dst, message, action):
         match = self.createOFMatch(
-            match, rule, rule.dst, rule.src)
-        msg = self.createOFRule(msg, match, action)
-        self.connection.send(msg)
+            match, rule, src, dst)
+        message = self.createOFMsg(message, match.OFMatch, action)
+        self.connection.send(message.OFMessage)
 
-    def createOFMatch(
-            self, 
-            match, 
-            rule, 
-            src, 
-            dst, 
-            pktType = "IPv4"):
+    def createOFMatch(self, match, rule, src, dst, pktType = "IPv4"):
         if match == None:
             match = of_match.OFMtch().createMatchStruct()
         
@@ -154,15 +164,9 @@ class Firewall(EventMixin):
         .destination(dst)
 
         log.info(match.testAttr)
-        return match.OFMatch
+        return match
 
-    def createOFMsg(
-            self, 
-            msg, 
-            match, 
-            action, 
-            priority = 20,
-            jump = "DROP"):
+    def createOFMsg(self, msg, match, action, priority = 20,jump = "DROP"):
         if msg == None:
             msg = of_message.OFMsg().createFlowTableEntry()
 
@@ -173,7 +177,7 @@ class Firewall(EventMixin):
             .addOrDeleteOFRule(action)
 
         log.info(msg.testAttr)
-        return msg.OFMessage
+        return msg
 
     def showFirewallRules(self):
         message = "\n                         " + \
