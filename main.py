@@ -55,7 +55,7 @@ class Firewall(EventMixin):
                 newRule = Rule(
                     src = rule[1], 
                     dst = rule[2], 
-                    ip_proto = rule[3], 
+                    trans_proto = rule[3], 
                     app_proto = rule[4], 
                     expiration = rule[5], 
                     delay = rule[6]
@@ -148,11 +148,11 @@ class Firewall(EventMixin):
         log.info(matchStruct.testAttr)
 
     def createOFMatchStruct(
-            packetType = "IPv4", 
             self, 
             rule, 
             src, 
-            dst):
+            dst, 
+            packetType = "IPv4"):
         return of_match.OFMtch()\
             .createMatchStruct()\
             .packetType(packetType)\
@@ -161,11 +161,16 @@ class Firewall(EventMixin):
             .source(src)\
             .destination(dst)
 
-    def createOFRule(self, match, action):
+    def createOFRule(
+            self, 
+            match, 
+            action, 
+            priority = 20,
+            jump = "DROP"):
         return of_message.OFMsg()\
             .createFlowTableEntry()\
-            .priority(20)\
-            .jump("DROP")\
+            .priority(priority)\
+            .jump(jump)\
             .match(match)\
             .addOrDeleteOFRule(action)
 
