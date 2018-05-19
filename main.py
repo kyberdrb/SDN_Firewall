@@ -86,11 +86,11 @@ class Firewall (EventMixin):
         ).start()
 
     def removeRuleAfterExpiration(self, newRule, ruleID):
-        ''' Timer(
+        Timer(
             int(newRule.delay + newRule.expiration), 
             self.delFirewallRule, 
             [newRule, ruleID]
-        ).start() '''
+        ).start()
 
     def adjustDelayValue(self, newRule):
         return newRule
@@ -100,54 +100,25 @@ class Firewall (EventMixin):
                 message = "RULE EXISTS!: drop:"
         else:
             self.firewall[ruleID] = rule
-            self.pushRuleToSwitch(rule)
+            self.pushRuleToSwitch(rule, action="add")
             message = "Rule added: drop:"
         message += " id:" + ruleID + " " + str(rule)
         log.info(message)
         self.showFirewallRules()
 
     # TODO - basically, make this method should look similar to the 'addFirewallRule': add 'rule' parameter + edit all parameters like: 'src' to 'rule.src' etc. -> see 'addFirewallRule' method
-    def delFirewallRule (
-            self, 
-            src=0, 
-            dst=0, 
-            ip_proto=0, 
-            app_proto=0, 
-            expiration = 0,
-            delay = 0, 
-            value=True):
-        if  (src,
-            dst, 
-            ip_proto, 
-            app_proto) in self.firewall:
-                del self.firewall[(
-                    src, 
-                    dst, 
-                    ip_proto, 
-                    app_proto
-                )]
-                self.pushRuleToSwitch(
-                    src, 
-                    dst, 
-                    ip_proto, 
-                    app_proto, 
-                    expiration
-                )
-                message = "Rule Deleted: drop:"
+    def delFirewallRule (self, rule, ruleID):
+        if ruleID in self.firewall:
+            del self.firewall[ruleID]
+            self.pushRuleToSwitch(rule, action="del")
+            message = "Rule Deleted: drop:"
         else:
             message = "RULE DOESN'T EXIST!: drop:"
-        ''' message += self.ruleInfo(
-            src, 
-            dst, 
-            ip_proto, 
-            app_proto, 
-            expiration,
-            delay
-        ) '''
+        message += " id:" + ruleID + " " + str(rule)
         log.info(message)
         self.showFirewallRules()
 
-    def pushRuleToSwitch (self, rule):
+    def pushRuleToSwitch (self, rule, action):
         # TODO - for 'msg' object create new class, that will use function chaining
         # TODO - Move the creating of a switch flow table entry to a separate method
         msg = of.ofp_flow_mod()
@@ -164,7 +135,7 @@ class Firewall (EventMixin):
 
         # TODO - Move to separate method with more meaningful name
         # TODO - Remove the rule from the 'firewall' datastructure after its expiration - maybe create another Timer at the time, when the rule is added to the 'firewall' datastructure, that will call the 'delFirewallRule' method
-        msg.hard_timeout = int(rule.expiration)
+        #msg.hard_timeout = int(rule.expiration)
 
 ###################################################################
 
@@ -201,18 +172,6 @@ class Firewall (EventMixin):
             match.tp_dst = 25
         else:
             match.tp_dst = None
-
-###################################################################
-
-        # TODO - the logic, whether the rule should be kept or removed, should be in another method - this method should only add/remove rules to/from switch
-        
-        '''# TODO - interfering with persistent rules
-         if int(rule.expiration) == 0:
-            action = "del"
-        else:
-            action = "add" '''
-
-        action = "add"
 
 ###################################################################
 
