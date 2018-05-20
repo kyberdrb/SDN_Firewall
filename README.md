@@ -114,9 +114,18 @@ Návod plynule nadväzuje na [dokumentáciu k semestrálnej práci](https://gith
 
     čím stiahneme najnovšiu verziu modulu z repozitára a reštartujeme radič, aby sa všetky zmeny prejavili.
 
+## Ďalšie podporované formáty pravidiel
+
+    #src,dst,trans_proto,app_proto,expiration,delay
+    10.0.0.1,10.0.0.2,udp,any,10000,20
+    10.0.0.1,10.0.0.2,udp,any,10000,20
+    10.0.0.2,10.0.0.3,icmp,any,60,30
+    10.0.0.1,10.0.0.2,icmp,any,0,15
+    10.0.0.1,10.0.0.3,tcp,http,10000,-15   << toto pravidlo blokuje aj ping komunikáciu medzi h1 a h3 (pingall)
+
 ## Známe problémy:
 * Platnosť jedného MAC záznamu na prepínači je cca 20 sekúnd, preto sa môže stať, že sa aktivácia pravidla oneskorí o tento čas
-* TCP pravidlo blokuje aj ICMP správy??
+* TCP pravidlo blokuje aj ICMP správy
 
 ## TODO
 * Aktualizácia pravidiel pri spustenom kontroléri metódou "polling" - dotazovania sa na posledný čas zmeny súboru s firewall pravidlami napr. každú sekundu -> potom vymazať všetky existujúce pravidlá a nahrať nové pravidlá, ideálne pridať a odstrániť iba tie pravidlá, ktoré sú rôzne od práve načítaných
