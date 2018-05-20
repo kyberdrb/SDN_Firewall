@@ -1,14 +1,6 @@
 from pox.core import core
-
-# TODO - delete the import below after successful migration to "of_message" and "of_match"
-import pox.openflow.libopenflow_01 as of
-
 from pox.lib.revent import *
 from pox.lib.util import dpidToStr
-
-# TODO - delete the import below after successful migration to "of_match"
-import pox.lib.packet as pkt
-
 from pox.lib.addresses import EthAddr, IPAddr
 import os
 import csv
